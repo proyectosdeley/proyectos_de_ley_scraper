@@ -13,11 +13,24 @@ class ProyectoSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        for sel in response.xpath("//a"):
-            if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
+        items = []
+        append = items.append
+        selectors = response.xpath("//a")
+        for sel in selectors:
+            href = sel.xpath("@href").extract()
+            if href[0].endswith('opendocument'):
+                for_link = [
+                    "http://www2.congreso.gob.pe",
+                    "/Sicr/TraDocEstProc/CLProLey2011.nsf/",
+                    href[0],
+                ]
+                our_link = ''.join(for_link)
                 item = PdlScraperItem()
                 item['numero_proyecto'] = sel.xpath('text()').extract()[0]
-                yield item
+                item['seguimiento_page'] = our_link
+                item['titulo'] = sel.xpath("@title").extract()[0]
+                print item
+
         # doc_links = self.extract_doc_links(response)
         # return doc_links
         """

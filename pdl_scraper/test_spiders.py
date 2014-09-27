@@ -14,7 +14,9 @@ class TestProyectoSpider(unittest.TestCase):
         filename = os.path.join('spiders', 'frontpage.html')
         results = self.spider.parse(fake_response_from_file(filename))
         for item in results:
-            self.assertIsNotNone(item['numero_proyecto'])
+            self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])
+            self.assertEqual(u'0-CR', item['seguimiento_page'])
+            break
 
 
 
