@@ -13,10 +13,11 @@ class TestProyectoSpider(unittest.TestCase):
     def test_parse(self):
         filename = os.path.join('spiders', 'frontpage.html')
         results = self.spider.parse(fake_response_from_file(filename))
-        for item in results:
-            self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])
-            self.assertEqual(u'0-CR', item['seguimiento_page'])
-            break
+        item = results[0]
+        self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])
+        self.assertEqual(u'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf/Sicr/TraDocEstProc/CLProLey2011.nsf/PAporNumeroInverso/9860D82E1806539D05257D5F007A74B5?opendocument',
+                         item['seguimiento_page'],
+                         )
 
 
 

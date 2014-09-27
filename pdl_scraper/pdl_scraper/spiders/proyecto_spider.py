@@ -29,7 +29,8 @@ class ProyectoSpider(scrapy.Spider):
                 item['numero_proyecto'] = sel.xpath('text()').extract()[0]
                 item['seguimiento_page'] = our_link
                 item['titulo'] = sel.xpath("@title").extract()[0]
-                print item
+                append(item)
+        return items
 
         # doc_links = self.extract_doc_links(response)
         # return doc_links
