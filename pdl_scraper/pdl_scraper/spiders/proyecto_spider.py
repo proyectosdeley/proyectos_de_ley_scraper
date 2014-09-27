@@ -10,6 +10,11 @@ class ProyectoSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        doc_links = self.extract_doc_links(response)
+
+    def extract_doc_links(self, response):
+        """Process frontpage of Congress and extracts links to each project."""
+        our_links = []
         for sel in response.xpath("//a"):
             if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
                 numero_proyecto = sel.xpath('text()').extract()
@@ -23,5 +28,12 @@ class ProyectoSpider(scrapy.Spider):
                         href,
                     ]
                     our_link = ''.join(for_link)
+                    if title is not None:
+                        our_links.append({'numero_proyecto': numero_proyecto,
+                                          'titulo': title,
+                                          'seguimiento_page': our_link},
+                                         )
+        return our_links
+
 
 
