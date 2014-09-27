@@ -27,7 +27,7 @@ class ProyectoeSpider(CrawlSpider):
                 self.log(">>> this is codigo %s" % codigo)
             if sel.xpath('@name').extract()[0] == 'CodIni_web_1':
                 numero_proyecto = sel.xpath('@value').extract()[0]
-                self.log(">>> this is numero_proyecto %s" % numpero_proyecto)
+                self.log(">>> this is numero_proyecto %s" % numero_proyecto)
             if sel.xpath('@name').extract()[0] == 'NomCongre':
                 congresistas = sel.xpath('@value').extract()[0]
                 self.log(">>> this is congresistas %s" % congresistas)
