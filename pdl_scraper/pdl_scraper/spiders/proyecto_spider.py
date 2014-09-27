@@ -1,7 +1,11 @@
+from __future__ import absolute_import
 import re
 
+import sqlalchemy
 import scrapy
 from pdl_scraper.items import PdlScraperItem
+from pdl_scraper.models import Proyecto, db_connect, create_proyecto_table
+from sqlalchemy.orm import sessionmaker
 
 
 class ProyectoSpider(scrapy.Spider):
@@ -11,6 +15,10 @@ class ProyectoSpider(scrapy.Spider):
         'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf' \
         '/PAporNumeroInverso?OpenView',
     ]
+
+    def __init__(self):
+        db = db_connect()
+        self.table = db['pdl_proyecto']
 
     def parse(self, response):
         items = []
@@ -29,7 +37,10 @@ class ProyectoSpider(scrapy.Spider):
                 item['numero_proyecto'] = sel.xpath('text()').extract()[0]
                 item['seguimiento_page'] = our_link
                 item['titulo'] = sel.xpath("@title").extract()[0]
-                append(item)
+
+                if self.is_in_db(item) is False:
+                    # continue scraping
+                    append(item)
         return items
 
         # doc_links = self.extract_doc_links(response)
@@ -56,29 +67,14 @@ class ProyectoSpider(scrapy.Spider):
                 break
         """
 
-    def extract_doc_links(self, response):
-        """Process frontpage of Congress and extracts links to each project."""
-        our_links = []
-        for sel in response.xpath("//a"):
-            if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
-                numero_proyecto = sel.xpath('text()').extract()[0]
-                return numero_proyecto
-                href = sel.xpath("//a/@href").extract()[0]
-                title = sel.xpath("//a/@title").extract()[0]
+    def is_in_db(self, item):
+        res = self.table.find_one(numero_proyecto=item['numero_proyecto'])
+        if res is None:
+            return False
+        else:
+            return True
 
-                if href.endswith("ocument"):
-                    for_link = [
-                        "http://www2.congreso.gob.pe",
-                        "/Sicr/TraDocEstProc/CLProLey2011.nsf/",
-                        href,
-                    ]
-                    our_link = ''.join(for_link)
-                    if title is not None:
-                        our_links.append({'numero_proyecto': numero_proyecto,
-                                          'titulo': title,
-                                          'seguimiento_page': our_link},
-                                         )
-        return our_links
+
 
     def gather_all_metadata(self, obj):
         """

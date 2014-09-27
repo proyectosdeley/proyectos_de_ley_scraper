@@ -11,7 +11,7 @@ class TestProyectoSpider(unittest.TestCase):
         self.spider = ProyectoSpider()
 
     def test_parse(self):
-        filename = os.path.join('spiders', 'frontpage.html')
+        filename = os.path.join('test_spiders_data', 'frontpage.html')
         results = self.spider.parse(fake_response_from_file(filename))
         item = results[0]
         self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])

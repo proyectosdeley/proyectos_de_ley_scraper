@@ -1,3 +1,4 @@
+import dataset
 from sqlalchemy import create_engine, Column, Integer, String, Date, \
     DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,7 +14,16 @@ def db_connect():
     Performs database connection using database settings from settings.py.
     Returns sqlalchemy engine instance
     """
-    return create_engine(URL(**settings.DATABASE))
+    database = [
+        settings.DATABASE['drivername'],
+        '//' + settings.DATABASE['username'],
+        settings.DATABASE['password'] + '@' + settings.DATABASE['host'],
+        settings.DATABASE['port'] + '/' + settings.DATABASE['database'],
+    ]
+    url = ':'.join(database)
+    print(url)
+    db = dataset.connect(url)
+    return db
 
 
 def create_proyecto_table(engine):
