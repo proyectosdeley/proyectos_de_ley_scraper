@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+# -*- coding: utf-8 -*-
+
+>>>>>>> old
 # Define here the models for your scraped items
 #
 # See documentation in:
