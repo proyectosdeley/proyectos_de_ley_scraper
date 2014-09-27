@@ -43,4 +43,5 @@ def fake_response_from_file(filename, url=None):
     response = TextResponse(url=url,
         request=request,
         body=file_content)
+    response._encoding = 'utf-8'
     return response

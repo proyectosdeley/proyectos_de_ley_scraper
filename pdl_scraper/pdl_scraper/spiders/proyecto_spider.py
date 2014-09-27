@@ -13,12 +13,8 @@ class ProyectoSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        for sel in response.xpath("//a"):
-            if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
-                item = PdlScraperItem()
-                item['numero_proyecto'] = sel.xpath('text()').extract()[0]
-                yield item
-        # doc_links = self.extract_doc_links(response)
+        doc_links = self.extract_doc_links(response)
+        return doc_links
         # return doc_links
         """
         for obj in doc_links:
@@ -47,8 +43,9 @@ class ProyectoSpider(scrapy.Spider):
         our_links = []
         for sel in response.xpath("//a"):
             if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
-                numero_proyecto = sel.xpath('text()').extract()[0]
-                return numero_proyecto
+                item = PdlScraperItem()
+                item['numero_proyecto'] = sel.xpath('text()').extract()[0]
+                yield item
                 href = sel.xpath("//a/@href").extract()[0]
                 title = sel.xpath("//a/@title").extract()[0]
 
@@ -64,7 +61,6 @@ class ProyectoSpider(scrapy.Spider):
                                           'titulo': title,
                                           'seguimiento_page': our_link},
                                          )
-        return our_links
 
     def gather_all_metadata(self, obj):
         """
