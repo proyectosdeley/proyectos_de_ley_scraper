@@ -1,4 +1,7 @@
+import re
+
 import scrapy
+from pdl_scraper.items import PdlScraperItem
 
 
 class ProyectoSpider(scrapy.Spider):
@@ -10,7 +13,14 @@ class ProyectoSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        doc_links = self.extract_doc_links(response)
+        for sel in response.xpath("//a"):
+            if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
+                item = PdlScraperItem()
+                item['numero_proyecto'] = sel.xpath('text()').extract()[0]
+                yield item
+        # doc_links = self.extract_doc_links(response)
+        # return doc_links
+        """
         for obj in doc_links:
             print("Working on %s:" % obj['numero_proyecto'])
             obj = self.gather_all_metadata(obj)
@@ -30,15 +40,17 @@ class ProyectoSpider(scrapy.Spider):
 
             if 'test' in options and options['test'] is True:
                 break
+        """
 
     def extract_doc_links(self, response):
         """Process frontpage of Congress and extracts links to each project."""
         our_links = []
         for sel in response.xpath("//a"):
             if re.search("[0-9]{5}/[0-9]{4}", sel.extract()):
-                numero_proyecto = sel.xpath('text()').extract()
-                href = sel.xpath("//a/@href").extract()
-                title = sel.xpath("//a/@title").extract()
+                numero_proyecto = sel.xpath('text()').extract()[0]
+                return numero_proyecto
+                href = sel.xpath("//a/@href").extract()[0]
+                title = sel.xpath("//a/@title").extract()[0]
 
                 if href.endswith("ocument"):
                     for_link = [
