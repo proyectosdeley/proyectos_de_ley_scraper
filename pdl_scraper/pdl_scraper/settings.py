@@ -48,3 +48,14 @@ NEWSPIDER_MODULE = 'pdl_scraper.spiders'
 CONCURRENT_REQUESTS = 1
 CONCURRENT_REQUESTS_PER_DOMAIN = 1
 DOWNLOAD_DELAY = 5
+
+
+CRAWLERA_USER = get_secret("CRAWLERA_USER")
+CRAWLERA_PASS = get_secret("CRAWLERA_PASS")
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapylib.crawlera.CrawleraMiddleware': 600,
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36",
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': "http://" + CRAWLERA_USER + ":" + CRAWLERA_PASS + "@proxy.crawlera.com:8010/",
+}
+CRAWLERA_ENABLED = True
