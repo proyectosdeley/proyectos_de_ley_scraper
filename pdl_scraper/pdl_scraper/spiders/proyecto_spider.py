@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from pdl_scraper.items import PdlScraperItem
+import short_url
+
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
-import short_url
+
+from pdl_scraper.items import PdlScraperItem
 
 
 class ProyectoSpider(CrawlSpider):
@@ -17,7 +19,8 @@ class ProyectoSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('opendocument$',)), callback='parse_item'),
     )
 
-    def __init__(self):
+    def __init__(self, category=None, *args, **kwargs):
+        super(ProyectoSpider, self).__init__(*args, **kwargs)
         self.legislatura = "2011"
 
     def parse_item(self, response):
@@ -75,6 +78,7 @@ class ProyectoSpider(CrawlSpider):
         item['short_url'] = self.create_shorturl(item['codigo'])
 
         yield item
+
 
     def create_shorturl(self, codigo):
         """
