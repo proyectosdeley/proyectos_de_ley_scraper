@@ -19,12 +19,9 @@ class PdlScraperItem(Item):
     expediente = Field()
     pdf_url = Field()
     seguimiento_page = Field()
-
-    """
     proponente = Field()
     grupo_parlamentario = Field()
     iniciativas_agrupadas = Field()
     nombre_comision = Field()
     titulo_de_ley = Field()
     numero_de_ley = Field()
-    """
