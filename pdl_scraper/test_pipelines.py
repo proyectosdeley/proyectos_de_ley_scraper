@@ -15,7 +15,12 @@ class TestPipeline(unittest.TestCase):
                                       u'ni  Walter,Apaza Condori  Emiliano,'
                                       u'Nayap Kinin  Eduardo,Reynaga'
                                       u'Soto  Jhon Arquimides,Valencia '
-                                      u'Quiroz  Jaime Ruben'
+                                      u'Quiroz  Jaime Ruben',
+                         seguimientos=[
+                             '',
+                             u'28/08/2014 Decretado a... Economía',
+                             u' ',
+                         ]
         )
 
     def test_process_item(self):
@@ -24,3 +29,5 @@ class TestPipeline(unittest.TestCase):
                          datetime.date(2013, 10, 10))
         self.assertEqual(result_item['congresistas'][0:33], u'Espinoza Cruz, '
                                                       u'Marisol; Abugattás')
+        self.assertEqual(result_item['seguimientos'][0],
+                         (datetime.date(2014, 8, 28), u'Decretado a... Economía'))

@@ -12,6 +12,7 @@ class PdlScraperPipeline(object):
     def process_item(self, item, spider):
         item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
         item['congresistas'] = self.parse_names(item['congresistas'])
+        item['seguimientos'] = self.fix_seguimientos_list(item['seguimientos'])
         return item
 
     def fix_date(self, string):
@@ -38,3 +39,20 @@ class PdlScraperPipeline(object):
             names += i + "; "
         names = re.sub(";\s$", "", names)
         return names
+
+    def fix_seguimientos_list(self, events):
+        """
+        :param events: seguimientos
+        :return: a tuple (date object, event string)
+        """
+        new_events = []
+        append = new_events.append
+        for i in events:
+            i_strip = i.strip()
+            if i_strip != '':
+                res = re.search('^([0-9]{2}/[0-9]{2}/[0-9]{4})\s+(.+)', i_strip)
+                if res:
+                    d = datetime.strptime(res.groups()[0], '%d/%m/%Y')
+                    event = re.sub('\s+', ' ', res.groups()[1])
+                    append((datetime.date(d), event))
+        return new_events
