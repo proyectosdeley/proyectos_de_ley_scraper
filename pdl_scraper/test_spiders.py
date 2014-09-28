@@ -1,3 +1,4 @@
+#!-*- encoding: utf-8 -*-
 import os
 import unittest
 
@@ -11,12 +12,27 @@ class TestProyectoSpider(unittest.TestCase):
         self.spider = ProyectoSpider()
 
     def test_parse(self):
-        filename = os.path.join('test_spiders_data', '03838.html')
+        filename = os.path.join('test_spiders_data', '02764.html')
         results = self.spider.parse_item(fake_response_from_file(filename))
         for item in results:
-            self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])
-
-
+            self.assertEqual(u'02764/2013-CR', item['numero_proyecto'])
+            self.assertEqual(u'02764', item['codigo'])
+            self.assertEqual(u'Elias Aval', item['congresistas'][0:10])
+            self.assertEqual(u'', item['short_url'])
+            self.assertEqual(u'10/10/2013', item['fecha_presentacion'])
+            self.assertEqual(u'Propone Ley Universitaria', item['titulo'])
+            self.assertEqual(u'', item['expediente'])
+            self.assertEqual(u'', item['pdf_url'])
+            self.assertEqual(u'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf/Sicr/TraDocEstProc/CLProLey2011.nsf/PAporNumeroInverso/A4604A57E03E482405257C01000B1980?opendocument',
+                             item['seguimiento_page'])
+            self.assertEqual(u'Congreso', item['proponente'])
+            self.assertEqual(u'Grupo Parlamentario Fuerza Popular',
+                             item['grupo_parlamentario'])
+            self.assertEqual(u'00154', item['iniciativas_agrupadas'][0:5])
+            self.assertEqual(u'Comisión de Educación  Juventud y Deporte',
+                             item['nombre_comision'])
+            self.assertEqual(u'LEY UNIVERSITARIA', item['titulo_de_ley'])
+            self.assertEqual(u'Ley Nº: 30220', item['numero_de_ley'])
 
 def fake_response_from_file(filename, url=None):
     """
@@ -43,5 +59,5 @@ def fake_response_from_file(filename, url=None):
     response = TextResponse(url=url,
         request=request,
         body=file_content)
-    response._encoding = 'utf-8'
+    response._encoding = 'latin-1'
     return response

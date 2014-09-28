@@ -18,25 +18,47 @@ class ProyectoSpider(CrawlSpider):
 
     def parse_item(self, response):
         self.log("this is the url: %s" % response.url)
-        selectors = response.xpath("//input")
-        codigo, numero_proyecto, congresistas = '', '', ''
+        item = PdlScraperItem()
+        item['codigo'] = ''
+        item['numero_proyecto'] = ''
+        item['congresistas'] = ''
+        item['titulo'] = ''
+        item['short_url'] = ''
+        item['fecha_presentacion'] = ''
+        item['expediente'] = ''
+        item['pdf_url'] = ''
+        item['seguimiento_page'] = ''
+        item['proponente'] = ''
+        item['grupo_parlamentario'] = ''
+        item['iniciativas_agrupadas'] = ''
+        item['nombre_comision'] = ''
+        item['titulo_de_ley'] = ''
+        item['numero_de_ley'] = ''
 
+        selectors = response.xpath("//input")
         for sel in selectors:
             attr_name = sel.xpath('@name').extract()[0]
-
             if attr_name == 'CodIni':
-                codigo = sel.xpath('@value').extract()[0]
-                self.log("INFO: this is codigo %s" % codigo)
+                item['codigo'] = sel.xpath('@value').extract()[0]
             if attr_name == 'CodIni_web_1':
-                numero_proyecto = sel.xpath('@value').extract()[0]
-                self.log("INFO: this is numero_proyecto %s" % numero_proyecto)
+                item['numero_proyecto'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NomCongre':
-                congresistas = sel.xpath('@value').extract()[0]
-                self.log("INFO: this is congresistas %s" % congresistas)
+                item['congresistas'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'fechapre':
+                item['fecha_presentacion'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'DesPropo':
+                item['proponente'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'DesGrupParla':
+                item['grupo_parlamentario'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'Titulo':
+                item['titulo'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'CodIniSecu':
+                item['iniciativas_agrupadas'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'NumLey':
+                item['numero_de_ley'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'TitLey':
+                item['titulo_de_ley'] = sel.xpath('@value').extract()[0]
+            if attr_name == 'NombreDeLaComision':
+                item['nombre_comision'] = sel.xpath('@value').extract()[0]
 
-        if codigo != '' and numero_proyecto != '' and congresistas != '':
-            item = PdlScraperItem()
-            item['codigo'] = codigo
-            item['numero_proyecto'] = numero_proyecto
-            item['congresistas'] = congresistas
-            yield item
+        yield item
