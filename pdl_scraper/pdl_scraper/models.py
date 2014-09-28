@@ -13,6 +13,5 @@ def db_connect():
         settings.DATABASE['port'] + '/' + settings.DATABASE['database'],
     ]
     url = ':'.join(database)
-    print(url)
     db = dataset.connect(url)
     return db

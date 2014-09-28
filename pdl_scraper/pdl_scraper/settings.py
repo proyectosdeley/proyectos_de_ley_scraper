@@ -42,6 +42,10 @@ BOT_NAME = 'pdl_scraper'
 SPIDER_MODULES = ['pdl_scraper.spiders']
 NEWSPIDER_MODULE = 'pdl_scraper.spiders'
 
+ITEM_PIPELINES = {
+    'pdl_scraper.pipelines.PdlScraperPipeline': 300,
+}
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'pdl_scraper (+http://www.yourdomain.com)'
 # be nice

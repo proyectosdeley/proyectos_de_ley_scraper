@@ -34,6 +34,7 @@ class ProyectoSpider(CrawlSpider):
         item['fecha_presentacion'] = ''
         item['expediente'] = ''
         item['seguimiento_page'] = ''
+        item['seguimientos'] = ''
         item['proponente'] = ''
         item['grupo_parlamentario'] = ''
         item['iniciativas_agrupadas'] = ''
@@ -75,6 +76,10 @@ class ProyectoSpider(CrawlSpider):
         item['expediente'] = ''.join(for_expediente)
         item['seguimiento_page'] = response.url
         item['short_url'] = self.create_shorturl(item['codigo'])
+
+        for sel in response.xpath('//td[@width="112"]'):
+            if sel.xpath('font/text()').extract()[0] == 'Seguimiento':
+                item['seguimientos'] = sel.xpath('following-sibling::*//text()').extract()
 
         yield item
 
