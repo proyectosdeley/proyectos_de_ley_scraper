@@ -11,10 +11,10 @@ class TestProyectoSpider(unittest.TestCase):
         self.spider = ProyectoSpider()
 
     def test_parse(self):
-        filename = os.path.join('spiders', 'frontpage.html')
-        results = self.spider.parse(fake_response_from_file(filename))
+        filename = os.path.join('test_spiders_data', '03838.html')
+        results = self.spider.parse_item(fake_response_from_file(filename))
         for item in results:
-            self.assertIsNotNone(item['numero_proyecto'])
+            self.assertEqual('', item['numero_proyecto'])
 
 
 

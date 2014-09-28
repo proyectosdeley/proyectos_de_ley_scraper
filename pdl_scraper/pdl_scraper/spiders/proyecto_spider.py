@@ -4,7 +4,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 
 
-class ProyectoeSpider(CrawlSpider):
+class ProyectoSpider(CrawlSpider):
     name = "proyecto"
     allowed_domains = ["www2.congreso.gob.pe"]
     start_urls = (
@@ -13,8 +13,7 @@ class ProyectoeSpider(CrawlSpider):
     )
 
     rules = (
-        Rule(LinkExtractor(allow=('opendocument$',)),
-             callback='parse_item'),
+        Rule(LinkExtractor(allow=('opendocument$',)), callback='parse_item'),
     )
 
     def parse_item(self, response):
