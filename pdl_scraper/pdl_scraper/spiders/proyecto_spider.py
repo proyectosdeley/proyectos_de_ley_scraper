@@ -2,6 +2,7 @@
 from pdl_scraper.items import PdlScraperItem
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
+import short_url
 
 
 class ProyectoSpider(CrawlSpider):
@@ -15,6 +16,9 @@ class ProyectoSpider(CrawlSpider):
     rules = (
         Rule(LinkExtractor(allow=('opendocument$',)), callback='parse_item'),
     )
+
+    def __init__(self):
+        self.legislatura = "2011"
 
     def parse_item(self, response):
         self.log("this is the url: %s" % response.url)
@@ -60,5 +64,24 @@ class ProyectoSpider(CrawlSpider):
                 item['titulo_de_ley'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
+        for_expediente = [
+            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf'
+            '/visbusqptramdoc/',
+            item['codigo'],
+            '?opendocument',
+        ]
+        item['expediente'] = ''.join(for_expediente)
+        item['seguimiento_page'] = response.url
+        item['short_url'] = self.create_shorturl(item['codigo'])
 
         yield item
+
+    def create_shorturl(self, codigo):
+        """
+        Use "legislatura" and codigo to build a short url.
+        :param codigo: Code for Proyecto de ley "03774"
+        :return: 4aw8ym
+        """
+        mystring = "%s%s" % (self.legislatura, codigo)
+        url = short_url.encode_url(int(mystring))
+        return url

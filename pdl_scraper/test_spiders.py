@@ -15,24 +15,24 @@ class TestProyectoSpider(unittest.TestCase):
         filename = os.path.join('test_spiders_data', '02764.html')
         results = self.spider.parse_item(fake_response_from_file(filename))
         for item in results:
-            self.assertEqual(u'02764/2013-CR', item['numero_proyecto'])
-            self.assertEqual(u'02764', item['codigo'])
-            self.assertEqual(u'Elias Aval', item['congresistas'][0:10])
-            self.assertEqual(u'', item['short_url'])
-            self.assertEqual(u'10/10/2013', item['fecha_presentacion'])
-            self.assertEqual(u'Propone Ley Universitaria', item['titulo'])
-            self.assertEqual(u'', item['expediente'])
-            self.assertEqual(u'', item['pdf_url'])
-            self.assertEqual(u'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf/Sicr/TraDocEstProc/CLProLey2011.nsf/PAporNumeroInverso/A4604A57E03E482405257C01000B1980?opendocument',
-                             item['seguimiento_page'])
-            self.assertEqual(u'Congreso', item['proponente'])
-            self.assertEqual(u'Grupo Parlamentario Fuerza Popular',
-                             item['grupo_parlamentario'])
-            self.assertEqual(u'00154', item['iniciativas_agrupadas'][0:5])
-            self.assertEqual(u'Comisión de Educación  Juventud y Deporte',
-                             item['nombre_comision'])
-            self.assertEqual(u'LEY UNIVERSITARIA', item['titulo_de_ley'])
-            self.assertEqual(u'Ley Nº: 30220', item['numero_de_ley'])
+            self.assertEqual(item['numero_proyecto'], u'02764/2013-CR')
+            self.assertEqual(item['codigo'], u'02764')
+            self.assertEqual(item['congresistas'][0:10], u'Elias Aval')
+            self.assertEqual(item['short_url'], u'4zhube')
+            self.assertEqual(item['fecha_presentacion'], u'10/10/2013')
+            self.assertEqual(item['titulo'], u'Propone Ley Universitaria')
+            self.assertEqual(item['expediente'], u'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/visbusqptramdoc/02764?opendocument')
+            self.assertEqual(item['pdf_url'], u'')
+            self.assertEqual(item['seguimiento_page'],
+                             u'http://www.example.com')
+            self.assertEqual(item['proponente'], u'Congreso')
+            self.assertEqual(item['grupo_parlamentario'],
+                             u'Grupo Parlamentario Fuerza Popular')
+            self.assertEqual(item['iniciativas_agrupadas'][0:5], u'00154')
+            self.assertEqual(item['nombre_comision'],
+                            u'Comisión de Educación  Juventud y Deporte')
+            self.assertEqual(item['titulo_de_ley'], u'LEY UNIVERSITARIA')
+            self.assertEqual(item['numero_de_ley'], u'Ley Nº: 30220')
 
 def fake_response_from_file(filename, url=None):
     """
