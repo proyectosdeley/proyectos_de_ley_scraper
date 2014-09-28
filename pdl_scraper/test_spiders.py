@@ -22,7 +22,6 @@ class TestProyectoSpider(unittest.TestCase):
             self.assertEqual(item['fecha_presentacion'], u'10/10/2013')
             self.assertEqual(item['titulo'], u'Propone Ley Universitaria')
             self.assertEqual(item['expediente'], u'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/visbusqptramdoc/02764?opendocument')
-            self.assertEqual(item['pdf_url'], u'')
             self.assertEqual(item['seguimiento_page'],
                              u'http://www.example.com')
             self.assertEqual(item['proponente'], u'Congreso')

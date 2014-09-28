@@ -33,7 +33,6 @@ class ProyectoSpider(CrawlSpider):
         item['short_url'] = ''
         item['fecha_presentacion'] = ''
         item['expediente'] = ''
-        item['pdf_url'] = ''
         item['seguimiento_page'] = ''
         item['proponente'] = ''
         item['grupo_parlamentario'] = ''
