@@ -14,7 +14,7 @@ class TestProyectoSpider(unittest.TestCase):
         filename = os.path.join('test_spiders_data', '03838.html')
         results = self.spider.parse_item(fake_response_from_file(filename))
         for item in results:
-            self.assertEqual('', item['numero_proyecto'])
+            self.assertEqual(u'03838/2014-CR', item['numero_proyecto'])
 
 
 
