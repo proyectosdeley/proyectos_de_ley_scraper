@@ -50,10 +50,9 @@ class TestPipeline(unittest.TestCase):
                          (datetime.date(2014, 8, 28), u'Decretado a... Economía'))
 
     def test_save_item(self):
-        # database should not have it
+        # database should have it
         table = self.db['pdl_proyecto']
-        self.assertIsNone(table.find_one(codigo=self.item['codigo']))
-
-        # save item
-        self.pipeline.process_item(self.item, ProyectoSpider)
         self.assertIsNotNone(table.find_one(codigo=self.item['codigo']))
+
+        # delete item
+        table.delete(codigo=self.item['codigo'])
