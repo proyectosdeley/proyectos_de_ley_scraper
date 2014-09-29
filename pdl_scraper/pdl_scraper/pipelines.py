@@ -15,16 +15,23 @@ class PdlScraperPipeline(object):
         item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
         item['congresistas'] = self.parse_names(item['congresistas'])
         item['seguimientos'] = self.fix_seguimientos_list(item['seguimientos'])
+        self.save_item(item)
         return item
 
     def save_item(self, item):
         db = db_connect()
-        table = db['pdl_proyectos']
+        table = db['pdl_proyecto']
 
+        db.query("SELECT setval('pdl_proyecto_id_seq', (SELECT MAX(id) FROM pdl_proyecto)+1)")
         is_in_db = table.find_one(codigo=item['codigo'])
         if is_in_db is None:
+            logging.debug(">> %s is not in db" % item['codigo'])
+            # get last used id in our database
             table.insert(item)
-            logging.info("Saving project: %s" % item['codigo'])
+            logging.debug("Saving project: %s" % item['codigo'])
+        else:
+            logging.debug("%s is found in db" % item['codigo'])
+            logging.debug("not saving")
 
     def fix_date(self, string):
         """

@@ -28,6 +28,11 @@ def get_secret(setting, secrets=secrets):
         print(error_msg)
         sys.exit(1)
 
+
+# remember to setup a password for postgres user account, see:
+# http://stackoverflow.com/a/7696398/3605870
+
+# also create a test_pdl for unittests
 DATABASE = {
     'drivername': get_secret('drivername'),
     'username': get_secret('username'),
@@ -36,6 +41,7 @@ DATABASE = {
     'port': get_secret('port'),
     'database': get_secret('database'),
 }
+
 
 BOT_NAME = 'pdl_scraper'
 
