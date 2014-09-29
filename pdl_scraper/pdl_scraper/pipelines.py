@@ -33,6 +33,37 @@ class PdlScraperPipeline(object):
             logging.debug("%s is found in db" % item['codigo'])
             logging.debug("not saving")
 
+    def save_seguimientos(self, item):
+        """
+        Try to save a list of tuples to Seguimientos model if they don't
+        exist already.
+        """
+        db = db_connect()
+
+        db.query("SELECT setval('pdl_seguimientos_id_seq', (SELECT MAX(id) FROM pdl_seguimientos)+1)")
+
+        # get proyect id for these seguimientos
+        table = db['pdl_proyecto']
+        res = table.find_one(codigo=item['codigo'])
+        if res is None:
+            logging.critical("There is no project with that code: %s" % item['codigo'])
+        else:
+            # save
+            table = db['pdl_seguimientos']
+            proyecto_id = res.get('id')
+            seguimientos_to_save = []
+            append = seguimientos_to_save.append
+            for i in item['seguimientos']:
+                logging.debug(i)
+
+            """
+                res = table.find_one(i)
+                if res is None:
+                    # not in database
+                    append(i)
+            table.insert_many(seguimientos_to_save)
+            """
+
     def fix_date(self, string):
         """
         Takes an string date from Proyecto and converts it to Date object.

@@ -58,3 +58,25 @@ class TestPipeline(unittest.TestCase):
 
         # delete item
         table.delete(codigo=self.item['codigo'])
+
+    def test_save_seguimientos(self):
+        # get have our test item in the database with one seguimiento item
+        # get projecto id
+        table = self.db['pdl_proyecto']
+        table.insert(self.item)
+        res = table.find_one(codigo=self.item['codigo'])
+        projecto_id = res.get('id')
+
+        # no seguimientos in db for this project
+        table = self.db['pdl_seguimiento']
+        res = table.find_one(projecto_id=projecto_id)
+        self.assertEqual(res, None)
+
+        # save some seguimientos
+        fixed_item = self.pipeline.process_item(self.item, ProyectoSpider)
+        self.pipeline.save_seguimientos(fixed_item)
+        res = table.find_one(projecto_id=projecto_id)
+        self.assertEqual(res, None)
+
+
+
