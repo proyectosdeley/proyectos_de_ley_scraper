@@ -1,17 +1,25 @@
 import dataset
+from pdl_scraper import settings
 
 
-def db_connect():
+def db_connect(test=False):
     """
     Performs database connection using database settings from settings.py.
     Returns sqlalchemy engine instance
+    :param test: if test is True then create an empty test database
     """
+    if test is False:
+        database_name = settings.DATABASE['database']
+    else:
+        database_name = 'test_pdl'
+
     database = [
         settings.DATABASE['drivername'],
         '//' + settings.DATABASE['username'],
         settings.DATABASE['password'] + '@' + settings.DATABASE['host'],
-        settings.DATABASE['port'] + '/' + settings.DATABASE['database'],
-    ]
+        settings.DATABASE['port'] + '/' + database_name,
+        ]
     url = ':'.join(database)
+
     db = dataset.connect(url)
     return db

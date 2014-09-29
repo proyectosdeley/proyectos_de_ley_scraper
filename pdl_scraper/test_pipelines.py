@@ -31,3 +31,6 @@ class TestPipeline(unittest.TestCase):
                                                       u'Marisol; Abugattás')
         self.assertEqual(result_item['seguimientos'][0],
                          (datetime.date(2014, 8, 28), u'Decretado a... Economía'))
+
+    def test_save_item(self):
+        self.pipeline.save_item(self.item)

@@ -4,9 +4,11 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from datetime import datetime
+import logging
 import re
+
 from models import db_connect
-from scrapy.exceptions import DropItem
+
 
 class PdlScraperPipeline(object):
     def process_item(self, item, spider):
@@ -14,6 +16,15 @@ class PdlScraperPipeline(object):
         item['congresistas'] = self.parse_names(item['congresistas'])
         item['seguimientos'] = self.fix_seguimientos_list(item['seguimientos'])
         return item
+
+    def save_item(self, item):
+        db = db_connect()
+        table = db['pdl_proyectos']
+
+        is_in_db = table.find_one(codigo=item['codigo'])
+        if is_in_db is None:
+            table.insert(item)
+            logging.info("Saving project: %s" % item['codigo'])
 
     def fix_date(self, string):
         """
