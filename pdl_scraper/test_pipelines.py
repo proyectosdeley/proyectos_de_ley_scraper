@@ -54,5 +54,7 @@ class TestPipeline(unittest.TestCase):
         table = self.db['pdl_proyecto']
         self.assertIsNotNone(table.find_one(codigo=self.item['codigo']))
 
+        self.pipeline.save_item(self.item)
+
         # delete item
         table.delete(codigo=self.item['codigo'])
