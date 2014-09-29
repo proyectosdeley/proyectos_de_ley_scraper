@@ -51,7 +51,8 @@ class TestPipeline(unittest.TestCase):
 
     def test_save_item(self):
         # database should have it
-        table = self.db['pdl_proyecto']
+        db = db_connect()
+        table = db['pdl_proyecto']
         self.assertIsNotNone(table.find_one(codigo=self.item['codigo']))
 
         self.pipeline.save_item(self.item)
@@ -60,23 +61,28 @@ class TestPipeline(unittest.TestCase):
         table.delete(codigo=self.item['codigo'])
 
     def test_save_seguimientos(self):
-        # get have our test item in the database with one seguimiento item
+        # get our test item in the database with one seguimiento item
         # get projecto id
-        table = self.db['pdl_proyecto']
+        db = db_connect()
+        table = db['pdl_proyecto']
         table.insert(self.item)
         res = table.find_one(codigo=self.item['codigo'])
-        projecto_id = res.get('id')
+        proyecto_id = res.get('id')
 
         # no seguimientos in db for this project
-        table = self.db['pdl_seguimiento']
-        res = table.find_one(projecto_id=projecto_id)
+        table = db['pdl_seguimiento']
+        res = table.find_one(proyecto_id=proyecto_id)
         self.assertEqual(res, None)
 
         # save some seguimientos
         fixed_item = self.pipeline.process_item(self.item, ProyectoSpider)
         self.pipeline.save_seguimientos(fixed_item)
-        res = table.find_one(projecto_id=projecto_id)
-        self.assertEqual(res, None)
 
+        # delete item
+        db.query("SELECT setval('pdl_proyecto_id_seq', (SELECT MAX(id) FROM pdl_proyecto)+1)")
 
+        table = self.db['pdl_proyecto']
+        table.delete(codigo=fixed_item['codigo'])
 
+        table = db['pdl_seguimientos']
+        table.delete(proyecto_id=proyecto_id)

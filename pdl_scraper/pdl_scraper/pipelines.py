@@ -40,8 +40,6 @@ class PdlScraperPipeline(object):
         """
         db = db_connect()
 
-        db.query("SELECT setval('pdl_seguimientos_id_seq', (SELECT MAX(id) FROM pdl_seguimientos)+1)")
-
         # get proyect id for these seguimientos
         table = db['pdl_proyecto']
         res = table.find_one(codigo=item['codigo'])
@@ -54,15 +52,20 @@ class PdlScraperPipeline(object):
             seguimientos_to_save = []
             append = seguimientos_to_save.append
             for i in item['seguimientos']:
-                logging.debug(i)
+                new_i = {'fecha': i[0],
+                         'evento': i[1],
+                         'proyecto_id': proyecto_id,
+                }
+                logging.debug(new_i)
 
-            """
-                res = table.find_one(i)
+                res = table.find_one(fecha=datetime.strftime(new_i['fecha'],
+                                                             '%Y-%m%-d'),
+                                     evento=new_i['evento'],
+                                     proyecto_id=new_i['proyecto_id'])
                 if res is None:
                     # not in database
-                    append(i)
+                    append(new_i)
             table.insert_many(seguimientos_to_save)
-            """
 
     def fix_date(self, string):
         """
