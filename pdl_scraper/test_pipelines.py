@@ -86,3 +86,18 @@ class TestPipeline(unittest.TestCase):
 
         table = db['pdl_seguimientos']
         table.delete(proyecto_id=proyecto_id)
+
+    def test_save_slug(self):
+        db = db_connect()
+        table = db['pdl_slug']
+        fixed_item = self.pipeline.process_item(self.item, ProyectoSpider)
+        fixed_item['congresistas'] = u'Pacheco Soy, Yóní'
+        self.pipeline.save_slug(fixed_item)
+
+        res = table.find_one(slug='pacheco_soy_yoni/')
+        self.assertEqual(res['nombre'], u'Pacheco Soy, Yóní')
+
+        res = self.pipeline.save_slug(fixed_item)
+        self.assertEqual(res, 'slug already in database')
+
+        table.delete(slug='pacheco_soy_yoni/')
