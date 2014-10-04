@@ -111,8 +111,9 @@ class PdlScraperPipeline(object):
 class SeguimientosPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'seguimientos':
-            item['seguimientos'] = "dummyseguimientos"
-            print(">>>item", item)
+            print(item['seguimientos'])
+            log.msg(item['codigo'])
+            log.msg(item['seguimientos'])
             return item
 
     def save_seguimientos(self, item):

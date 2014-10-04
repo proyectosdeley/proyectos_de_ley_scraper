@@ -82,7 +82,6 @@ class ProyectoSpider(CrawlSpider):
                 item['seguimientos'] = sel.xpath('following-sibling::*//text()').extract()
         """
         self.log("Worked on item %s." % str(item['codigo']))
-
         yield item
 
 
