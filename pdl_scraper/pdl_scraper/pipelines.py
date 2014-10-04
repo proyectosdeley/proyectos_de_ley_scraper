@@ -4,7 +4,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from datetime import datetime
-import logging
+from scrapy import log
 import re
 import unicodedata
 
@@ -30,13 +30,13 @@ class PdlScraperPipeline(object):
         db.query("SELECT setval('pdl_proyecto_id_seq', (SELECT MAX(id) FROM pdl_proyecto)+1)")
         is_in_db = table.find_one(codigo=item['codigo'])
         if is_in_db is None:
-            logging.debug(">> %s is not in db" % item['codigo'])
+            log.msg(">> %s is not in db" % item['codigo'])
             # get last used id in our database
             table.insert(item)
-            logging.debug("Saving project: %s" % item['codigo'])
+            log.msg("Saving project: %s" % item['codigo'])
         else:
-            logging.debug("%s is found in db" % item['codigo'])
-            logging.debug("not saving")
+            log.msg("%s is found in db" % item['codigo'])
+            log.msg("not saving")
 
     def save_seguimientos(self, item):
         """
@@ -49,7 +49,7 @@ class PdlScraperPipeline(object):
         table = db['pdl_proyecto']
         res = table.find_one(codigo=item['codigo'])
         if res is None:
-            logging.critical("There is no project with that code: %s" % item['codigo'])
+            log.msg("There is no project with that code: %s" % item['codigo'])
         else:
             # save
             table = db['pdl_seguimientos']
@@ -61,7 +61,7 @@ class PdlScraperPipeline(object):
                          'evento': i[1],
                          'proyecto_id': proyecto_id,
                 }
-                logging.debug(new_i)
+                log.msg(new_i)
 
                 res = table.find_one(fecha=datetime.strftime(new_i['fecha'],
                                                              '%Y-%m%-d'),
