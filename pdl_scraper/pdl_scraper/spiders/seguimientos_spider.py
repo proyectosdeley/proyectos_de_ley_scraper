@@ -15,6 +15,8 @@ class DmozSpider(scrapy.Spider):
             if sel.xpath('font/text()').extract()[0] == 'Seguimiento':
                 item = SeguimientosItem()
                 item['seguimientos'] = sel.xpath('following-sibling::*//text()').extract()
+                item['codigo'] = "dummy"
+                print(item)
                 yield item
 
         filename = response.url.split("/")[-2]
