@@ -18,7 +18,7 @@ class PdlScraperItem(Item):
     titulo = Field()
     expediente = Field()
     seguimiento_page = Field()
-    seguimientos = Field()
+    # seguimientos = Field()
     proponente = Field()
     grupo_parlamentario = Field()
     iniciativas_agrupadas = Field()

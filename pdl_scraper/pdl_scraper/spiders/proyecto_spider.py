@@ -34,7 +34,6 @@ class ProyectoSpider(CrawlSpider):
         item['fecha_presentacion'] = ''
         item['expediente'] = ''
         item['seguimiento_page'] = ''
-        item['seguimientos'] = ''
         item['proponente'] = ''
         item['grupo_parlamentario'] = ''
         item['iniciativas_agrupadas'] = ''
