@@ -16,7 +16,7 @@ class SeguimientoSpider(scrapy.Spider):
                 item = SeguimientosItem()
                 item['seguimientos'] = sel.xpath('following-sibling::*//text()').extract()
                 #self.log('item seguimientos2 %s' % item['seguimientos2'])
-                item['codigo'] = u"dummy"
+                item['codigo'] = u"00001"
                 #self.log('item codigo2 %s' % item['codigo2'])
 
                 yield item
