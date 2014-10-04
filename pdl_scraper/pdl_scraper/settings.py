@@ -50,6 +50,7 @@ NEWSPIDER_MODULE = 'pdl_scraper.spiders'
 
 ITEM_PIPELINES = {
     'pdl_scraper.pipelines.PdlScraperPipeline': 300,
+    #'pdl_scraper.pipelines.SeguimientosPipeline': 400,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -68,7 +69,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': "http://" + CRAWLERA_USER + ":" + CRAWLERA_PASS + "@proxy.crawlera.com:8010/",
 }
 
-CRAWLERA_ENABLED = True
+CRAWLERA_ENABLED = False
 
 
 LOG_LEVEL = 'DEBUG'
