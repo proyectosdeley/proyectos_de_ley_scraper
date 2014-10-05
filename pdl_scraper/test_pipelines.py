@@ -46,8 +46,6 @@ class TestPipeline(unittest.TestCase):
                          datetime.date(2013, 10, 10))
         self.assertEqual(result_item['congresistas'][0:33], u'Espinoza Cruz, '
                                                       u'Marisol; Abugattás')
-        self.assertEqual(result_item['seguimientos'][0],
-                         (datetime.date(2014, 8, 28), u'Decretado a... Economía'))
 
     def test_save_item(self):
         # database should have it
@@ -60,32 +58,6 @@ class TestPipeline(unittest.TestCase):
         # delete item
         table.delete(codigo=self.item['codigo'])
 
-    def test_save_seguimientos(self):
-        # get our test item in the database with one seguimiento item
-        # get projecto id
-        db = db_connect()
-        table = db['pdl_proyecto']
-        table.insert(self.item)
-        res = table.find_one(codigo=self.item['codigo'])
-        proyecto_id = res.get('id')
-
-        # no seguimientos in db for this project
-        table = db['pdl_seguimiento']
-        res = table.find_one(proyecto_id=proyecto_id)
-        self.assertEqual(res, None)
-
-        # save some seguimientos
-        fixed_item = self.pipeline.process_item(self.item, ProyectoSpider)
-        self.pipeline.save_seguimientos(fixed_item)
-
-        # delete item
-        db.query("SELECT setval('pdl_proyecto_id_seq', (SELECT MAX(id) FROM pdl_proyecto)+1)")
-
-        table = self.db['pdl_proyecto']
-        table.delete(codigo=fixed_item['codigo'])
-
-        table = db['pdl_seguimientos']
-        table.delete(proyecto_id=proyecto_id)
 
     def test_save_slug(self):
         db = db_connect()

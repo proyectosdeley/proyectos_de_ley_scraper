@@ -24,8 +24,6 @@ class TestProyectoSpider(unittest.TestCase):
             self.assertEqual(item['expediente'], u'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/visbusqptramdoc/02764?opendocument')
             self.assertEqual(item['seguimiento_page'],
                              u'http://www.example.com')
-            self.assertEqual(item['seguimientos'][1][0:25],
-                             u'14/10/2013 Decretado a...')
             self.assertEqual(item['proponente'], u'Congreso')
             self.assertEqual(item['grupo_parlamentario'],
                              u'Grupo Parlamentario Fuerza Popular')
