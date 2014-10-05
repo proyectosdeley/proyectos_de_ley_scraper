@@ -13,13 +13,11 @@ import six
 from models import db_connect
 
 
-
 class PdlScraperPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'proyecto':
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
-            # item['seguimientos'] = self.fix_seguimientos_list(item['seguimientos'])
             self.save_item(item)
             return item
 
@@ -106,5 +104,3 @@ class PdlScraperPipeline(object):
             else:
                 slug = slug.encode("utf-8")
             return slug + "/"
-
-

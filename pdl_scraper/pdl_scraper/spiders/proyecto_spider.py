@@ -11,7 +11,7 @@ class ProyectoSpider(CrawlSpider):
     name = "proyecto"
     allowed_domains = ["www2.congreso.gob.pe"]
     start_urls = (
-        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf' \
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf'
         '/PAporNumeroInverso?OpenView',
     )
 
@@ -78,7 +78,6 @@ class ProyectoSpider(CrawlSpider):
 
         self.log("Worked on item %s." % str(item['codigo']))
         yield item
-
 
     def create_shorturl(self, codigo):
         """

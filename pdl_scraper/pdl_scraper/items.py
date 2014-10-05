@@ -25,4 +25,3 @@ class PdlScraperItem(Item):
     nombre_comision = Field()
     titulo_de_ley = Field()
     numero_de_ley = Field()
-

@@ -53,7 +53,7 @@ ITEM_PIPELINES = {
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'pdl_scraper (+http://www.yourdomain.com)'
+# USER_AGENT = 'pdl_scraper (+http://www.yourdomain.com)'
 # be nice
 CONCURRENT_REQUESTS = 1
 CONCURRENT_REQUESTS_PER_DOMAIN = 1

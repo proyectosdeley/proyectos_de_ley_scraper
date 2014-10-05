@@ -13,19 +13,19 @@ class TestPipeline(unittest.TestCase):
         self.item = dict(fecha_presentacion= u'10/10/2013',
                          codigo=u'11111111111',
                          numero_proyecto=u'11111111111/2014-CR',
-                         short_url = u'',
-                         titulo = '',
-                         expediente = '',
-                         pdf_url = '',
-                         time_created = datetime.date.today(),
-                         time_edited = datetime.date.today(),
-                         seguimiento_page = '',
-                         grupo_parlamentario = '',
-                         iniciativas_agrupadas = '',
-                         nombre_comision = '',
-                         numero_de_ley = '',
-                         titulo_de_ley = '',
-                         proponente = '',
+                         short_url=u'',
+                         titulo='',
+                         expediente='',
+                         pdf_url='',
+                         time_created=datetime.date.today(),
+                         time_edited=datetime.date.today(),
+                         seguimiento_page='',
+                         grupo_parlamentario='',
+                         iniciativas_agrupadas='',
+                         nombre_comision='',
+                         numero_de_ley='',
+                         titulo_de_ley='',
+                         proponente='',
                          congresistas=u'Espinoza Cruz  Marisol,Abugattás '
                                       u'Majluf  Daniel Fernando,Acha Roma'
                                       u'ni  Walter,Apaza Condori  Emiliano,'
@@ -57,7 +57,6 @@ class TestPipeline(unittest.TestCase):
 
         # delete item
         table.delete(codigo=self.item['codigo'])
-
 
     def test_save_slug(self):
         db = db_connect()
