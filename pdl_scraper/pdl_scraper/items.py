@@ -26,7 +26,3 @@ class PdlScraperItem(Item):
     titulo_de_ley = Field()
     numero_de_ley = Field()
 
-
-class SeguimientosItem(Item):
-    codigo = Field()
-    seguimientos = Field()
