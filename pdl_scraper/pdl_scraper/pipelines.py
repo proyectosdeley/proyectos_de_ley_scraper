@@ -67,6 +67,12 @@ class PdlScraperPipeline(object):
         :param string:
         :return: list of iniciativas
         """
+        if type(string) == list:
+            return ''
+
+        if string.strip() == '':
+            return ''
+
         iniciativas = string.split(",")
         iniciativas_stripped = [i.strip() for i in iniciativas]
         return iniciativas_stripped

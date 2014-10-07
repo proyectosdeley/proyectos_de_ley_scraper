@@ -40,6 +40,28 @@ class TestPipeline(unittest.TestCase):
         )
         self.db = db_connect()
 
+    def test_parse_iniciativas(self):
+        iniciativas_agrupadas = u'00154, 00353, 00368, 00484, 00486'
+        result = self.pipeline.parse_iniciativas(iniciativas_agrupadas)
+        expected = [
+            u'00154',
+            u'00353',
+            u'00368',
+            u'00484',
+            u'00486',
+        ]
+        self.assertEqual(expected, result)
+
+        iniciativas_agrupadas = u''
+        result = self.pipeline.parse_iniciativas(iniciativas_agrupadas)
+        expected = ''
+        self.assertEqual(expected, result)
+
+        iniciativas_agrupadas = []
+        result = self.pipeline.parse_iniciativas(iniciativas_agrupadas)
+        expected = ''
+        self.assertEqual(expected, result)
+
     def test_process_item(self):
         result_item = self.pipeline.process_item(self.item, ProyectoSpider)
         self.assertEqual(result_item['iniciativas_agrupadas'], [
