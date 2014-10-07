@@ -18,6 +18,7 @@ class PdlScraperPipeline(object):
         if spider.name == 'proyecto':
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
+            item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             self.save_item(item)
             return item
 
@@ -60,6 +61,15 @@ class PdlScraperPipeline(object):
             names += i + "; "
         names = re.sub(";\s$", "", names)
         return names
+
+    def parse_iniciativas(self, string):
+        """
+        :param string:
+        :return: list of iniciativas
+        """
+        iniciativas = string.split(",")
+        iniciativas_stripped = [i.strip() for i in iniciativas]
+        return iniciativas_stripped
 
     def save_slug(self, obj):
         db = db_connect()
