@@ -27,6 +27,13 @@ class TestPdfUrlSpider(unittest.TestCase):
         expected = 'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc02_2011_2.nsf/d99575da99ebfbe305256f2e006d1cf0/4465dd7d442d1a6d05257d65007d0796/$FILE/PL03847021014.pdf'
         self.assertEqual(expected, result)
 
+        codigo = '00864'
+        filename = codigo + '.html'
+        response = fake_response_from_file(filename)
+        result = self.spider.find_pdfurl(codigo, response)
+        expected = 'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/d99575da99ebfbe305256f2e006d1cf0/e58512d0bfb9118d052579bb0054c0e2/$FILE/PL00864080312.-.pdf'
+        self.assertEqual(expected, result)
+
 
 def fake_response_from_file(filename, url=None):
     """
