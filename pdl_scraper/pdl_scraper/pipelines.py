@@ -21,6 +21,7 @@ class PdlScraperPipeline(object):
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             self.save_item(item)
             return item
+        return item
 
     def save_item(self, item):
         db = db_connect()
@@ -120,3 +121,113 @@ class PdlScraperPipeline(object):
             else:
                 slug = slug.encode("utf-8")
             return slug + "/"
+
+
+class SeguimientosPipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'seguimientos':
+            item['seguimientos'] = self.fix_seguimientos_list(item['seguimientos'])
+            log.msg(item['codigo'])
+            log.msg(item['seguimientos'])
+            self.save_seguimientos(item)
+            return item
+        return item
+
+    def fix_seguimientos_list(self, events):
+        """
+        :param events: seguimientos
+        :return: a tuple (date object, event string)
+        """
+        new_events = []
+        append = new_events.append
+        for i in events:
+            i_strip = i.strip()
+            if i_strip != '':
+                res = re.search('^([0-9]{2}/[0-9]{2}/[0-9]{4})\s+(.+)', i_strip)
+                if res:
+                    d = datetime.strptime(res.groups()[0], '%d/%m/%Y')
+                    event = re.sub('\s+', ' ', res.groups()[1])
+                    append((datetime.date(d), event))
+        return new_events
+
+    def save_seguimientos(self, item):
+        """
+        Try to save a list of tuples to Seguimientos model if they don't
+        exist already.
+        """
+        log.msg("Try to save seguimientos.")
+        db = db_connect()
+
+        # get proyect id for these seguimientos
+        table = db['pdl_proyecto']
+        res = table.find_one(codigo=item['codigo'])
+        if res is None:
+            log.msg("There is no project with that code: %s" % item['codigo'])
+        else:
+            # save
+            table = db['pdl_seguimientos']
+            proyecto_id = res.get('id')
+            seguimientos_to_save = []
+            append = seguimientos_to_save.append
+            for i in item['seguimientos']:
+                new_i = {'fecha': i[0],
+                         'evento': i[1],
+                         'proyecto_id': proyecto_id,
+                         }
+                log.msg("Trying to save evento %s, proyecto_id %s fecha %s" %
+                        (
+                         new_i['evento'],
+                         new_i['proyecto_id'],
+                         datetime.strftime(new_i['fecha'], '%Y-%m-%d'),
+                         )
+                )
+
+                res2 = table.find_one(
+                    fecha=datetime.strftime(new_i['fecha'], '%Y-%m-%d'),
+                    evento=new_i['evento'],
+                    proyecto_id=new_i['proyecto_id']
+                )
+                if res2 is None:
+                    # not in database
+                    log.msg("This event is not in the database.")
+                    append(new_i)
+                else:
+                    log.msg("This event is already in the database.")
+            table.insert_many(seguimientos_to_save)
+
+
+class IniciativasPipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'iniciativa':
+            item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
+            log.msg(item['codigo'])
+            self.save_iniciativas(item)
+            return item
+        return item
+
+    def parse_iniciativas(self, string):
+        """
+        :param string:
+        :return: list of iniciativas
+        """
+        if type(string) == list:
+            return ''
+
+        if string.strip() == '':
+            return ''
+
+        iniciativas = string.split(",")
+        iniciativas_stripped = [i.strip() for i in iniciativas]
+        return iniciativas_stripped
+
+    def save_iniciativas(self, item):
+        """
+        Try to save a list of tuples to Seguimientos model if they don't
+        exist already.
+        """
+        log.msg("Try to save iniciativas.")
+        db = db_connect()
+
+        # get proyect id for these seguimientos
+        table = db['pdl_proyecto']
+        table.update(item, ['codigo'])
