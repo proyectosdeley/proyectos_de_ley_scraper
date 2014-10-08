@@ -21,7 +21,6 @@ class IniciativaSpider(scrapy.Spider):
 
             if attr_name == 'CodIniSecu':
                 item['iniciativas_agrupadas'] = sel.xpath('@value').extract()[0]
-                item['codigo']
         yield item
 
     def get_my_urls(self):
