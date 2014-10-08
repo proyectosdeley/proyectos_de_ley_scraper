@@ -231,3 +231,15 @@ class IniciativasPipeline(object):
         # get proyect id for these seguimientos
         table = db['pdl_proyecto']
         table.update(item, ['codigo'])
+
+
+class PdlPdfurlPipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'pdfurl':
+            # save pdfurl
+            log.msg("Try saving pdf_url to database: %s." % item['codigo'])
+            db = db_connect()
+            table = db['pdl_proyecto']
+            table.update(item, ['codigo'])
+            return item
+        return item

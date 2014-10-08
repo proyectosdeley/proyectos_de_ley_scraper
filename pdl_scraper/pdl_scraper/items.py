@@ -34,3 +34,9 @@ class SeguimientosItem(Item):
 class IniciativaItem(Item):
     codigo = Field()
     iniciativas_agrupadas = Field()
+
+
+class PdlPdfUrlItem(Item):
+    # define the fields for your item here like:
+    pdf_url = Field()
+    codigo = Field()
