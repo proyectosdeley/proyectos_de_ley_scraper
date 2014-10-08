@@ -3,7 +3,7 @@ import unittest
 
 from scrapy.http import TextResponse, Request
 
-from pdl_pdfurl.spiders.pdfurl_spider import PdfUrlSpider
+from pdl_scraper.spiders.pdfurl_spider import PdfUrlSpider
 
 
 class TestPdfUrlSpider(unittest.TestCase):
@@ -44,7 +44,7 @@ def fake_response_from_file(filename, url=None):
     request = Request(url=url)
     if not filename[0] == '/':
         responses_dir = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(responses_dir, 'test_data', filename)
+        file_path = os.path.join(responses_dir, 'test_spiders_data', filename)
     else:
         file_path = filename
 
