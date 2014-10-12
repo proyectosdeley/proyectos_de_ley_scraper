@@ -9,6 +9,7 @@ from scrapy.item import Item, Field
 
 
 class PdlScraperItem(Item):
+    # TODO time_created is needed for our database. Scrape it and upload it.
     # define the fields for your item here like:
     codigo = Field()
     numero_proyecto = Field()
