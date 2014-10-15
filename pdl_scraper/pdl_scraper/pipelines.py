@@ -19,6 +19,7 @@ class PdlScraperPipeline(object):
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
+            item['time_created'] = datetime.today()
             self.save_item(item)
             return item
         return item

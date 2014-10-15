@@ -17,7 +17,7 @@ class TestPipeline(unittest.TestCase):
                          titulo='',
                          expediente='',
                          pdf_url='',
-                         time_created=datetime.date.today(),
+                         time_created='',
                          time_edited=datetime.date.today(),
                          seguimiento_page='',
                          grupo_parlamentario='',
@@ -73,6 +73,10 @@ class TestPipeline(unittest.TestCase):
         ])
         self.assertEqual(result_item['fecha_presentacion'],
                          datetime.date(2013, 10, 10))
+
+        time_created = result_item['time_created']
+        self.assertEqual(time_created.date(),
+                         datetime.date.today())
         self.assertEqual(result_item['congresistas'][0:33], u'Espinoza Cruz, '
                                                       u'Marisol; Abugattás')
 
