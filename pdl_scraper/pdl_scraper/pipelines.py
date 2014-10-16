@@ -4,11 +4,12 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from datetime import datetime
-from scrapy import log
+import pytz
 import re
+import six
 import unicodedata
 
-import six
+from scrapy import log
 
 from models import db_connect
 
@@ -19,7 +20,7 @@ class PdlScraperPipeline(object):
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
-            item['time_created'] = datetime.today()
+            item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
             self.save_item(item)
             return item
         return item
