@@ -28,8 +28,8 @@ class IniciativaSpider(scrapy.Spider):
         start_urls = []
         append = start_urls.append
 
-        query = "select codigo, iniciativas_agrupadas, seguimiento_page from " \
-                "pdl_proyecto"
+        query = "select codigo, iniciativas_agrupadas, seguimiento_page " \
+                "from pdl_proyecto order by time_edited"
         res = db.query(query)
 
         for i in res:

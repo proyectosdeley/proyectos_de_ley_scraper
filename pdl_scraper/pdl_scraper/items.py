@@ -35,6 +35,7 @@ class SeguimientosItem(Item):
 class IniciativaItem(Item):
     codigo = Field()
     iniciativas_agrupadas = Field()
+    time_edited = Field()
 
 
 class PdlPdfUrlItem(Item):

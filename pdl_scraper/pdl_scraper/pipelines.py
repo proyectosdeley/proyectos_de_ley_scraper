@@ -202,6 +202,7 @@ class IniciativasPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'iniciativa':
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
+            item['time_edited'] = datetime.utcnow().replace(tzinfo=pytz.utc)
             log.msg(item['codigo'])
             self.save_iniciativas(item)
             return item
