@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import re
+
 import short_url
 
+import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 
@@ -77,7 +80,38 @@ class ProyectoSpider(CrawlSpider):
         item['short_url'] = self.create_shorturl(item['codigo'])
 
         self.log("Worked on item %s." % str(item['codigo']))
-        yield item
+        request = scrapy.Request(item['expediente'],
+                                 callback=self.parse_pdfurl)
+        request.meta['item'] = item
+        return request
+
+    def parse_pdfurl(self, response):
+        item = response.meta['item']
+        codigo = item['codigo']
+        for sel in response.xpath("//a"):
+            href = sel.xpath("@href").extract()[0]
+
+            pattern = re.compile("\$FILE\/" + str(codigo) + "\.pdf$")
+            if re.search(pattern, href):
+                self.log("Found pdfurl for code: %s" % str(codigo))
+                item['pdf_url'] = href
+                return item
+
+            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$")
+            if re.search(pattern, href):
+                self.log("Found pdfurl for code: %s" % str(codigo))
+                item['pdf_url'] = href
+                return item
+
+            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$")
+            if re.search(pattern, href):
+                self.log("Found pdfurl for code: %s" % str(codigo))
+                item['pdf_url'] = href
+                return item
+
+        self.log("We failed to parse pdfurl for this project %s:" % str(codigo))
+        item['pdf_url'] = ''
+        return item
 
     def create_shorturl(self, codigo):
         """

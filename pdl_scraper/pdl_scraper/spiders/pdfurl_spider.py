@@ -31,7 +31,7 @@ class PdfUrlSpider(scrapy.Spider):
 
             pattern = re.compile("\$FILE\/" + str(codigo) + "\.pdf$")
             if re.search(pattern, href):
-                log.msg("Found pdfulr for code: %s" % str(codigo))
+                log.msg("Found pdfurl for code: %s" % str(codigo))
                 return href
 
             pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$")
@@ -44,7 +44,6 @@ class PdfUrlSpider(scrapy.Spider):
                 log.msg("Found pdfurl for code: %s" % str(codigo))
                 return href
 
-        # we failed to get pdfurl
         log.msg("We failed to parse pdfurl for this project %s:" % str(codigo))
         return ''
 
