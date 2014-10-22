@@ -35,15 +35,18 @@ class IniciativaSpider(scrapy.Spider):
         for i in res:
             iniciativas = i['iniciativas_agrupadas']
             if type(iniciativas) == list:
-                if len(iniciativas) < 1 and i['seguimiento_page'] != '':
-                    # this field is empty, scrape it!
+                if len(iniciativas) < 1:
+                    if i['seguimiento_page'] != '':
+                        # this field is empty, scrape it!
+                        append(i['seguimiento_page'])
+
+            elif iniciativas is None:
+                if i['seguimiento_page'] != '':
                     append(i['seguimiento_page'])
 
-            elif iniciativas is None and i['seguimiento_page'] != '':
-                append(i['seguimiento_page'])
-
-            elif iniciativas.strip() == '' and i['seguimiento_page'] != '':
-                append(i['seguimiento_page'])
+            elif iniciativas.strip() == '':
+                if i['seguimiento_page'] != '':
+                    append(i['seguimiento_page'])
 
         return start_urls
 
