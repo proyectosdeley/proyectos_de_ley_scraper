@@ -26,6 +26,7 @@ class PdlScraperItem(Item):
     numero_de_ley = Field()
     pdf_url = Field()
     time_created = Field()
+    time_edited = Field()
 
 
 class SeguimientosItem(Item):

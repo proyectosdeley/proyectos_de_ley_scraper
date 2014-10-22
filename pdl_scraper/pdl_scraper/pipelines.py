@@ -21,6 +21,7 @@ class PdlScraperPipeline(object):
             item['congresistas'] = self.parse_names(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
+            item['time_edited'] = datetime.utcnow().replace(tzinfo=pytz.utc)
             self.save_item(item)
             return item
         return item
