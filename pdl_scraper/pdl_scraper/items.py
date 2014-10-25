@@ -44,3 +44,12 @@ class PdlPdfUrlItem(Item):
     # define the fields for your item here like:
     pdf_url = Field()
     codigo = Field()
+
+
+class UpdaterItem(Item):
+    codigo = Field()
+    proponente = Field()
+    grupo_parlamentario = Field()
+    nombre_comision = Field()
+    titulo_de_ley = Field()
+    numero_de_ley = Field()

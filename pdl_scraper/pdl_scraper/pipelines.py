@@ -247,3 +247,14 @@ class PdlPdfurlPipeline(object):
             table.update(item, ['codigo'])
             return item
         return item
+
+
+class UpdaterPipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'updater':
+            log.msg("Try saving item to database: %s." % item['codigo'])
+            db = db_connect()
+            table = db['pdl_proyecto']
+            table.update(item, ['codigo'])
+            return item
+        return item
