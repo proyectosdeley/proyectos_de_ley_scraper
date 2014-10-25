@@ -6,6 +6,7 @@ from pdl_scraper.models import db_connect
 
 
 class UpdaterSpider(scrapy.Spider):
+    """Updates some fields that were added later."""
     name = "updater"
     allowed_domains = ["www2.congreso.gob.pe"]
 
