@@ -20,6 +20,7 @@ class TestPdfUrlSpider(unittest.TestCase):
             '01367',
             '00052',
             '00253',
+            '00313',
         )
         expected = (
             'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/d99575da99ebfbe305256f2e006d1cf0/e8ad7d6747e75b8e052578df005a92ab/$FILE/00001.pdf',
@@ -29,6 +30,7 @@ class TestPdfUrlSpider(unittest.TestCase):
             'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/0/8e0331a84969f79305257a4b007a7b2b/$FILE/01367300712.pdf',
             'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/d99575da99ebfbe305256f2e006d1cf0/d18f1338ca3a643b052578f1007a96ba/$FILE/00052PL1882011.pdf',
             'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/d99575da99ebfbe305256f2e006d1cf0/db59e670c91ac96b05257913006ebf4b/$FILE/PL00253220911---.pdf',
+            'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc01_2011.nsf/d99575da99ebfbe305256f2e006d1cf0/ad4b72e8abf4e2f20525792100085776/$FILE/PL00313051011,.pdf',
         )
         for i in range(len(codigos)):
             codigo = codigos[i]
