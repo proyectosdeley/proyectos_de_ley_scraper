@@ -48,9 +48,12 @@ class PdlScraperPipeline(object):
         :return: date(2014, 08, 28)
         """
         try:
-            mydate = datetime.date(datetime.strptime(string, '%m/%d/%Y'))
-        except ValueError:
             mydate = datetime.date(datetime.strptime(string, '%d/%m/%Y'))
+        except ValueError:
+            # mydate = datetime.date(datetime.strptime(string, '%m/%d/%Y'))
+            log.msg("fecha_presentacion was not in the right format.")
+            string = "1970-01-01"
+            mydate = datetime.date(datetime.strptime(string, '%Y-%m-%d'))
         return mydate
 
     def parse_names(self, string):
