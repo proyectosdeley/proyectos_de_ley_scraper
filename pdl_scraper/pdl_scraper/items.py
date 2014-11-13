@@ -53,3 +53,8 @@ class UpdaterItem(Item):
     nombre_comision = Field()
     titulo_de_ley = Field()
     numero_de_ley = Field()
+
+
+class UpdateFechaPresentacionItem(Item):
+    codigo = Field()
+    fecha_presentacion = Field()

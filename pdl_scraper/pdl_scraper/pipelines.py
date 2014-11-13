@@ -261,3 +261,33 @@ class UpdaterPipeline(object):
             table.update(item, ['codigo'])
             return item
         return item
+
+
+class UpdateFechaPresentacionPipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'fecha_presentacion':
+            item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
+            self.save_item(item)
+            return item
+        return item
+
+    def save_item(self, item):
+        db = db_connect()
+        table = db['pdl_proyecto']
+        table.update(item, ['codigo'])
+        log.msg("Saving project: %s" % item['codigo'])
+
+    def fix_date(self, string):
+        """
+        Takes an string date from Proyecto and converts it to Date object.
+        :param string: "08/28/2014"
+        :return: date(2014, 08, 28)
+        """
+        try:
+            mydate = datetime.date(datetime.strptime(string, '%d/%m/%Y'))
+        except ValueError:
+            # mydate = datetime.date(datetime.strptime(string, '%m/%d/%Y'))
+            log.msg("fecha_presentacion was not in the right format.")
+            string = "1970-01-01"
+            mydate = datetime.date(datetime.strptime(string, '%Y-%m-%d'))
+        return mydate
