@@ -17,13 +17,12 @@ class ExpedienteSpider(scrapy.Spider):
     def get_my_urls(self):
         """Extract data from expedientes page.
 
-        :return: List of date, URL, URL_text, project_code
+        :return: List of date, URL, URL_text, project_id
         """
         db = db_connect()
         start_urls = []
         append = start_urls.append
 
-        # get list of proyects ids from pdl_proyecto table with no events
         query = "select expediente from pdl_proyecto"
         res = db.query(query)
         j = 0
