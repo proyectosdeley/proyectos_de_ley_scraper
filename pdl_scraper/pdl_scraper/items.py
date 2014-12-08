@@ -58,3 +58,10 @@ class UpdaterItem(Item):
 class UpdateFechaPresentacionItem(Item):
     codigo = Field()
     fecha_presentacion = Field()
+
+
+class ExpedienteItem(Item):
+    codigo = Field()
+    fecha_presentacion = Field()
+    url = Field()
+    texto = Field()
