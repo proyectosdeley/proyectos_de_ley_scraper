@@ -72,7 +72,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': "http://" + CRAWLERA_USER + ":" + CRAWLERA_PASS + "@proxy.crawlera.com:8010/",
 }
 
-CRAWLERA_ENABLED = False
+CRAWLERA_ENABLED = True
 
 
 LOG_LEVEL = 'DEBUG'
