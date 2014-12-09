@@ -62,7 +62,7 @@ class UpdateFechaPresentacionItem(Item):
 
 class ExpedienteItem(Item):
     proyecto_id = Field()
-    fecha_presentacion = Field()
+    fecha = Field()
     pdf_url = Field()
-    texto = Field()
+    evento = Field()
     expediente_url = Field()

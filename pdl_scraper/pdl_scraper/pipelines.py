@@ -17,7 +17,7 @@ from models import db_connect
 class PdlScraperPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'proyecto':
-            item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
+            item['fecha'] = self.fix_date(item['fecha'])
             item['congresistas'] = self.parse_names(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -320,13 +320,13 @@ class ExpedientePipeline(object):
         """
         Try to save if they don't exist already.
         """
-        log.msg("Try to save events in expediente.")
+        log.msg("Try to save events in expedientes.")
         db = db_connect()
-        table = db['pdl_expediente']
+        table = db['pdl_expedientes']
 
         res = table.find_one(
-            fecha=item['fecha_presentacion'],
-            evento=item['texto'],
+            fecha=item['fecha'],
+            evento=item['evento'],
             proyecto_id=item['proyecto_id'],
             pdf_url=item['pdf_url'],
         )
