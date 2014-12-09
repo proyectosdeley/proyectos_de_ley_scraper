@@ -12,7 +12,7 @@ items = [
         'fecha_publicacion': '26/06/2014',
         'texto': 'Asistencia y votación - Primera votación',
         'expediente_url': 'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/visbusqptramdoc/02764?opendocument',
-        'pdf_link': 'http://some_pdf_link.pdf1',
+        'pdf_url': 'http://some_pdf_link.pdf1',
     },
     {
         'fecha_publicacion': '26/06/2014',
