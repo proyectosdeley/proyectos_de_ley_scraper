@@ -54,6 +54,7 @@ ITEM_PIPELINES = {
     'pdl_scraper.pipelines.IniciativasPipeline': 500,
     'pdl_scraper.pipelines.PdlPdfurlPipeline': 600,
     'pdl_scraper.pipelines.UpdaterPipeline': 700,
+    'pdl_scraper.pipelines.ExpedientePipeline': 800,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

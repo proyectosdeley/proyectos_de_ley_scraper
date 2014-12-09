@@ -291,3 +291,63 @@ class UpdateFechaPresentacionPipeline(object):
             string = "1970-01-01"
             mydate = datetime.date(datetime.strptime(string, '%Y-%m-%d'))
         return mydate
+
+
+class ExpedientePipeline(object):
+    def process_item(self, item, spider):
+        if spider.name == 'expediente':
+            item['proyecto_id'] = self.get_proyecto_id(item)
+            item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
+            del item['expediente_url']
+            self.save_expediente_items(item)
+            return item
+        return item
+
+    def get_proyecto_id(self, item):
+        """
+        :param item: seguimientos
+        :return: proyecto_id from pdl_seguimientos table
+        """
+        db = db_connect()
+        table = db['pdl_proyecto']
+        res = table.find_one(expediente=item['expediente_url'])
+        if res is None:
+            log.msg("There is no project with that expediente_url: %s" % item['expediente_url'])
+        else:
+            return res.get('id')
+
+    def save_expediente_items(self, item):
+        """
+        Try to save if they don't exist already.
+        """
+        log.msg("Try to save events in expediente.")
+        db = db_connect()
+        table = db['pdl_expediente']
+
+        res = table.find_one(
+            fecha=item['fecha_presentacion'],
+            evento=item['texto'],
+            proyecto_id=item['proyecto_id'],
+            pdf_url=item['pdf_url'],
+        )
+        if res is None:
+            # not in database
+            log.msg("This event is not in the database.")
+            table.insert(item)
+        else:
+            log.msg("This event '%s' is already in the database." % item['texto'])
+
+    def fix_date(self, string):
+        """
+        Takes an string date from Proyecto and converts it to Date object.
+        :param string: "08/28/2014"
+        :return: date(2014, 08, 28)
+        """
+        try:
+            mydate = datetime.date(datetime.strptime(string, '%d/%m/%Y'))
+        except ValueError:
+            # mydate = datetime.date(datetime.strptime(string, '%m/%d/%Y'))
+            log.msg("fecha_presentacion was not in the right format.")
+            string = "1970-01-01"
+            mydate = datetime.date(datetime.strptime(string, '%Y-%m-%d'))
+        return mydate
