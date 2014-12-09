@@ -42,7 +42,7 @@ class ExpedienteSpider(scrapy.Spider):
         events_selector = response.xpath("//table")[4]
         items = []
         this_date = ''
-        this_url = ''
+        pdf_url = ''
         this_text = ''
         for i in events_selector.xpath("tr"):
             item = ExpedienteItem()
@@ -52,18 +52,19 @@ class ExpedienteSpider(scrapy.Spider):
                 this_date = date_sel[0]
                 print(this_date)
 
-            url_sel = i.xpath("td/a/@href").extract()
-            if len(url_sel) > 0:
-                this_url = url_sel[0]
+            pdf_url_sel = i.xpath("td/a/@href").extract()
+            if len(pdf_url_sel) > 0:
+                pdf_url = pdf_url_sel[0]
 
             text_sel = i.xpath("td/a/b/font/text()").extract()
             if len(text_sel) > 0:
                 this_text = text_sel[0]
 
             item['fecha_presentacion'] = this_date
-            item['url'] = this_url
+            item['pdf_url'] = pdf_url
             item['texto'] = this_text
+            item['expediente_url'] = response.url
 
-            if this_date != '' and this_url != '' and this_text != '':
+            if this_date != '' and pdf_url != '' and this_text != '':
                 items.append(item)
         return items
