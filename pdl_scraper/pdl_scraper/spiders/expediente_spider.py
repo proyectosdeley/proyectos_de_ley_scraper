@@ -26,7 +26,6 @@ class ExpedienteSpider(scrapy.Spider):
         # get list of proyects ids from pdl_proyecto table with no events
         query = "select expediente from pdl_proyecto"
         res = db.query(query)
-        j = 0
         for i in res:
             append(i['expediente'])
             log.msg('Appending %s to start_urls.' % str(i['expediente']))
@@ -60,7 +59,7 @@ class ExpedienteSpider(scrapy.Spider):
             if len(text_sel) > 0:
                 this_text = text_sel[0]
 
-            item['fecha_publication'] = this_date
+            item['fecha_presentacion'] = this_date
             item['pdf_url'] = pdf_url
             item['texto'] = this_text
             item['expediente_url'] = response.url
