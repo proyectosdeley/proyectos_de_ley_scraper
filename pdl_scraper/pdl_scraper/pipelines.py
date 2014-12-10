@@ -297,7 +297,7 @@ class ExpedientePipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'expediente':
             item['proyecto_id'] = self.get_proyecto_id(item)
-            item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
+            item['fecha'] = self.fix_date(item['fecha'])
             del item['expediente_url']
             self.save_expediente_items(item)
             return item
@@ -335,7 +335,7 @@ class ExpedientePipeline(object):
             log.msg("This event is not in the database.")
             table.insert(item)
         else:
-            log.msg("This event '%s' is already in the database." % item['texto'])
+            log.msg("This event '%s' is already in the database." % item['evento'])
 
     def fix_date(self, string):
         """
@@ -344,10 +344,10 @@ class ExpedientePipeline(object):
         :return: date(2014, 08, 28)
         """
         try:
-            mydate = datetime.date(datetime.strptime(string, '%d/%m/%Y'))
+            mydate = datetime.strptime(string, '%d/%m/%y')
         except ValueError:
-            # mydate = datetime.date(datetime.strptime(string, '%m/%d/%Y'))
-            log.msg("fecha_presentacion was not in the right format.")
-            string = "1970-01-01"
-            mydate = datetime.date(datetime.strptime(string, '%Y-%m-%d'))
+            mydate = ''
+
+        if mydate != '':
+            mydate = datetime.strftime(mydate, '%Y-%m-%d')
         return mydate
