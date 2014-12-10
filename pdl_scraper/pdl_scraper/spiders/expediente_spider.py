@@ -32,10 +32,6 @@ class ExpedienteSpider(scrapy.Spider):
             append(i['expediente'])
             log.msg('Appending %s to start_urls.' % str(i['expediente']))
 
-        # TODO: remove these 3 lines
-        start_urls = [
-            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/visbusqptramdoc/02764?opendocument'
-        ]
         return start_urls
 
     def parse(self, response):
