@@ -17,7 +17,7 @@ from models import db_connect
 class PdlScraperPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'proyecto':
-            item['fecha'] = self.fix_date(item['fecha'])
+            item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -340,8 +340,8 @@ class ExpedientePipeline(object):
     def fix_date(self, string):
         """
         Takes an string date from Proyecto and converts it to Date object.
-        :param string: "08/28/2014"
-        :return: date(2014, 08, 28)
+        :param string: "08/28/14"
+        :return: 2014-08-28
         """
         try:
             mydate = datetime.strptime(string, '%d/%m/%y')

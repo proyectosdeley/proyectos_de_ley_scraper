@@ -3,6 +3,7 @@ import datetime
 import unittest
 
 from pdl_scraper.pipelines import PdlScraperPipeline
+from pdl_scraper.pipelines import ExpedientePipeline
 from pdl_scraper.spiders.proyecto_spider import ProyectoSpider
 from pdl_scraper.models import db_connect
 
@@ -105,3 +106,20 @@ class TestPipeline(unittest.TestCase):
         self.assertEqual(res, 'slug already in database')
 
         table.delete(slug='pacheco_soy_yoni/')
+
+
+class TestExpedientePipeline(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = ExpedientePipeline()
+
+    def test_fix_date(self):
+        string = "13/04/14"
+        result = self.pipeline.fix_date(string)
+        expected = "2014-04-13"
+        self.assertEqual(expected, result)
+
+    def test_fix_date_return_empty(self):
+        string = "04/13/14"
+        result = self.pipeline.fix_date(string)
+        expected = ""
+        self.assertEqual(expected, result)
