@@ -11,13 +11,17 @@ def db_connect():
     """
     database_name = settings.DATABASE['database']
 
-    database = [
-        settings.DATABASE['drivername'],
-        '//' + settings.DATABASE['username'],
-        settings.DATABASE['password'] + '@' + settings.DATABASE['host'],
-        settings.DATABASE['port'] + '/' + database_name,
+    if database_name == '':
+        print("WARNING:: Using SQLite as database.")
+        url = "sqlite:///test.db"
+    else:
+        database = [
+            settings.DATABASE['drivername'],
+            '//' + settings.DATABASE['username'],
+            settings.DATABASE['password'] + '@' + settings.DATABASE['host'],
+            settings.DATABASE['port'] + '/' + database_name,
         ]
-    url = ':'.join(database)
+        url = ':'.join(database)
 
     db = dataset.connect(url)
     return db
