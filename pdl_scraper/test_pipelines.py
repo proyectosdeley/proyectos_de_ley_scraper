@@ -4,9 +4,40 @@ import unittest
 
 from pdl_scraper.pipelines import PdlScraperPipeline
 from pdl_scraper.pipelines import ExpedientePipeline
+from pdl_scraper.pipelines import SeguimientosPipeline
 from pdl_scraper.spiders.proyecto_spider import ProyectoSpider
+from pdl_scraper.spiders.seguimientos_spider import SeguimientoSpider
 from pdl_scraper.models import db_connect
 
+
+ITEM = dict(fecha_presentacion=datetime.date(2013, 10, 10),
+            codigo=u'011',
+            numero_proyecto=u'11111111111/2014-CR',
+            short_url=u'',
+            titulo='',
+            expediente='',
+            pdf_url='',
+            time_created=datetime.date.today(),
+            time_edited=datetime.date.today(),
+            seguimiento_page='',
+            grupo_parlamentario='',
+            iniciativas_agrupadas=u'00154, 00353, 00368, 00484, 00486',
+            nombre_comision='',
+            numero_de_ley='',
+            titulo_de_ley='',
+            proponente='',
+            congresistas=u'Espinoza Cruz  Marisol,Abugattás '
+                         u'Majluf  Daniel Fernando,Acha Roma'
+                         u'ni  Walter,Apaza Condori  Emiliano,'
+                         u'Nayap Kinin  Eduardo,Reynaga'
+                         u'Soto  Jhon Arquimides,Valencia '
+                         u'Quiroz  Jaime Ruben',
+            #seguimientos=[
+                #'',
+                #u'28/08/2014 Decretado a... Economía',
+                #u' ',
+            #]
+            )
 
 class TestPipeline(unittest.TestCase):
     def setUp(self):
@@ -124,6 +155,47 @@ class TestPipeline(unittest.TestCase):
         expected = datetime.date(1970, 1, 1)
         result = self.pipeline.fix_date(string)
         self.assertEqual(expected, result)
+
+
+class TestSeguimientosPipeline(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = SeguimientosPipeline()
+
+    def test_fix_seguiminetos_list(self):
+        events = ['13/10/2012 Evento1', '14/11/2013 Evento2']
+        expected = [
+            (datetime.date(2012, 10, 13), 'Evento1'),
+            (datetime.date(2013, 11, 14), 'Evento2'),
+        ]
+        result = self.pipeline.fix_seguimientos_list(events)
+        self.assertEqual(expected, result)
+
+    def test_save_seguimientos(self):
+        db = db_connect()
+        table = db['pdl_proyecto']
+        table.insert(ITEM)
+        ITEM['seguimientos'] = [
+            (datetime.date(2012, 10, 13), 'Evento1'),
+            (datetime.date(2013, 11, 14), 'Evento2'),
+        ]
+        self.pipeline.save_seguimientos(ITEM)
+
+        res = db.query("select * from pdl_seguimientos")
+        result = []
+        for i in res:
+            result.append(i)
+        expected = 2
+        self.assertEqual(expected, len(result))
+
+    def test_process_item(self):
+        ITEM['seguimientos'] = ['13/10/2012 Evento1', '14/11/2013 Evento2']
+        expected = [
+            (datetime.date(2012, 10, 13), 'Evento1'),
+            (datetime.date(2013, 11, 14), 'Evento2'),
+        ]
+        result = self.pipeline.process_item(ITEM, SeguimientoSpider)
+        self.assertEqual(expected, result['seguimientos'])
+
 
 
 class TestExpedientePipeline(unittest.TestCase):
