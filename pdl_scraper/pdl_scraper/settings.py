@@ -16,8 +16,22 @@ import sys
 BASE_DIR = Path(__file__).absolute().ancestor(3)
 SECRETS_FILE = os.path.join(BASE_DIR, 'config.json')
 
-with open(SECRETS_FILE) as f:
-    secrets = json.loads(f.read())
+try:
+    with open(SECRETS_FILE) as f:
+        secrets = json.loads(f.read())
+except IOError:
+    print("WARNING:: Could not find config.json file. Using alternate values")
+    secrets = {
+        'drivername': '',
+        'username': '',
+        'password': '',
+        'host': '',
+        'port': '',
+        'database': '',
+        'crawlera_user': '',
+        'crawlera_pass': '',
+        'crawlera_enabled': '',
+    }
 
 
 def get_secret(setting, secrets=secrets):
