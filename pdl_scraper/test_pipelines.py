@@ -32,12 +32,8 @@ ITEM = dict(fecha_presentacion=datetime.date(2013, 10, 10),
                          u'Nayap Kinin  Eduardo,Reynaga'
                          u'Soto  Jhon Arquimides,Valencia '
                          u'Quiroz  Jaime Ruben',
-            #seguimientos=[
-                #'',
-                #u'28/08/2014 Decretado a... Economía',
-                #u' ',
-            #]
             )
+
 
 class TestPipeline(unittest.TestCase):
     def setUp(self):
@@ -69,7 +65,7 @@ class TestPipeline(unittest.TestCase):
                              u'28/08/2014 Decretado a... Economía',
                              u' ',
                          ]
-        )
+                         )
         self.db = db_connect()
 
     def test_parse_iniciativas(self):
@@ -110,7 +106,7 @@ class TestPipeline(unittest.TestCase):
         self.assertEqual(time_created.date(),
                          datetime.date.today())
         self.assertEqual(result_item['congresistas'][0:33], u'Espinoza Cruz, '
-                                                      u'Marisol; Abugattás')
+                                                            u'Marisol; Abugattás')
 
     def test_save_item(self):
         # database should have it
@@ -178,6 +174,7 @@ class TestSeguimientosPipeline(unittest.TestCase):
             (datetime.date(2012, 10, 13), 'Evento1'),
             (datetime.date(2013, 11, 14), 'Evento2'),
         ]
+        db.query("delete from pdl_seguimientos where 1=1")
         self.pipeline.save_seguimientos(ITEM)
 
         res = db.query("select * from pdl_seguimientos")
@@ -195,7 +192,6 @@ class TestSeguimientosPipeline(unittest.TestCase):
         ]
         result = self.pipeline.process_item(ITEM, SeguimientoSpider)
         self.assertEqual(expected, result['seguimientos'])
-
 
 
 class TestExpedientePipeline(unittest.TestCase):
