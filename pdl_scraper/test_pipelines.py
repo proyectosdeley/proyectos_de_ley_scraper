@@ -107,6 +107,18 @@ class TestPipeline(unittest.TestCase):
 
         table.delete(slug='pacheco_soy_yoni/')
 
+    def test_fix_date(self):
+        string = '13/10/2012'
+        expected = datetime.date(2012, 10, 13)
+        result = self.pipeline.fix_date(string)
+        self.assertEqual(expected, result)
+
+    def test_fix_date_exception(self):
+        string = '13/13/2012'
+        expected = datetime.date(1970, 1, 1)
+        result = self.pipeline.fix_date(string)
+        self.assertEqual(expected, result)
+
 
 class TestExpedientePipeline(unittest.TestCase):
     def setUp(self):
