@@ -5,6 +5,7 @@ import unittest
 from pdl_scraper.pipelines import PdlScraperPipeline
 from pdl_scraper.pipelines import ExpedientePipeline
 from pdl_scraper.pipelines import SeguimientosPipeline
+from pdl_scraper.pipelines import IniciativasPipeline
 from pdl_scraper.spiders.proyecto_spider import ProyectoSpider
 from pdl_scraper.spiders.seguimientos_spider import SeguimientoSpider
 from pdl_scraper.models import db_connect
@@ -192,6 +193,40 @@ class TestSeguimientosPipeline(unittest.TestCase):
         ]
         result = self.pipeline.process_item(ITEM, SeguimientoSpider)
         self.assertEqual(expected, result['seguimientos'])
+
+
+class TestIniciativasPipeline(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = IniciativasPipeline()
+        self.db = db_connect()
+
+    def test_parse_iniciativas(self):
+        string = '02134,03421'
+        expected = ['02134', '03421']
+        result = self.pipeline.parse_iniciativas(string)
+        self.assertEqual(expected, result)
+
+    def test_parse_iniciativas_list(self):
+        string = ['02130']
+        result = self.pipeline.parse_iniciativas(string)
+        expected = ''
+        self.assertEqual(expected, result)
+
+    def test_parse_iniciativas_empty(self):
+        string = ' '
+        expected = ''
+        result = self.pipeline.parse_iniciativas(string)
+        self.assertEqual(expected, result)
+
+    def test_save_iniciativas(self):
+        item = {
+            'codigo': '02734',
+            'iniciativas_agrupadas': ['02134', '03421'],
+        }
+        table = self.db['pdl_proyecto']
+        self.pipeline.save_iniciativas(item)
+        res = table.find_one(codigo='02734')
+        self.assertEqual('{02134,03421}', res['iniciativas_agrupadas'])
 
 
 class TestExpedientePipeline(unittest.TestCase):
