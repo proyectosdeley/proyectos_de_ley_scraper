@@ -107,6 +107,12 @@ class TestPipeline(unittest.TestCase):
 
         table.delete(slug='pacheco_soy_yoni/')
 
+    def test_convert_accented_name_to_slug(self):
+        name = "Yóní Páchécó Soy"
+        expected = "yoni_pacheco_soy/"
+        result = self.pipeline.convert_name_to_slug(name)
+        self.assertEqual(expected, result)
+
     def test_fix_date(self):
         string = '13/10/2012'
         expected = datetime.date(2012, 10, 13)
