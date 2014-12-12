@@ -8,6 +8,7 @@ from pdl_scraper.pipelines import SeguimientosPipeline
 from pdl_scraper.pipelines import IniciativasPipeline
 from pdl_scraper.spiders.proyecto_spider import ProyectoSpider
 from pdl_scraper.spiders.seguimientos_spider import SeguimientoSpider
+from pdl_scraper.spiders.iniciativas_spider import IniciativaSpider
 from pdl_scraper.models import db_connect
 
 
@@ -199,6 +200,24 @@ class TestIniciativasPipeline(unittest.TestCase):
     def setUp(self):
         self.pipeline = IniciativasPipeline()
         self.db = db_connect()
+
+    def test_process_item(self):
+        item = {
+            'iniciativas_agrupadas': '02134, 02324',
+            'codigo': '02764',
+        }
+        result = self.pipeline.process_item(item, IniciativaSpider)
+        expected = ['02134', '02324']
+        self.assertEqual(expected, result['iniciativas_agrupadas'])
+
+    def test_process_item_return(self):
+        item = {
+            'iniciativas_agrupadas': '02134, 02324',
+            'codigo': '02764',
+            }
+        result = self.pipeline.process_item(item, SeguimientoSpider)
+        expected = '02134, 02324'
+        self.assertEqual(expected, result['iniciativas_agrupadas'])
 
     def test_parse_iniciativas(self):
         string = '02134,03421'
