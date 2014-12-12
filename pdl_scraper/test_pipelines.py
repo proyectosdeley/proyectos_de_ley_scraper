@@ -251,6 +251,20 @@ class TestIniciativasPipeline(unittest.TestCase):
 class TestExpedientePipeline(unittest.TestCase):
     def setUp(self):
         self.pipeline = ExpedientePipeline()
+        self.db = db_connect()
+
+    def test_expediente_items(self):
+        item = {
+            'evento': 'Ley modificatoria de la Ley 27314, Ley General',
+	        'fecha': '',
+            'pdf_url': u'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/Contdoc02_2011_2.nsf/d99575da99ebfbe305256f2e006d1cf0/94b5fe12ac4be3b705257c9c0008daad/$FILE/PL03279140314.pdf',
+	        'proyecto_id': 3280,
+        }
+        self.pipeline.save_expediente_items(item)
+        table = self.db['pdl_expediente']
+        result = table.find_one(proyecto_id=3280)
+        expected = None
+        self.assertEqual(expected, result)
 
     def test_fix_date(self):
         string = "13/04/14"

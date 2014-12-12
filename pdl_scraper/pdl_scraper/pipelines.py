@@ -324,18 +324,21 @@ class ExpedientePipeline(object):
         db = db_connect()
         table = db['pdl_expedientes']
 
-        res = table.find_one(
-            fecha=item['fecha'],
-            evento=item['evento'],
-            proyecto_id=item['proyecto_id'],
-            pdf_url=item['pdf_url'],
-        )
-        if res is None:
-            # not in database
-            log.msg("This event is not in the database.")
-            table.insert(item)
-        else:
-            log.msg("This event '%s' is already in the database." % item['evento'])
+        if item['fecha'] != '':
+            # Sometimes we scrap title when there are no events. The fecha will
+            # be empty, so continue and ignore this item.
+            res = table.find_one(
+                fecha=item['fecha'],
+                evento=item['evento'],
+                proyecto_id=item['proyecto_id'],
+                pdf_url=item['pdf_url'],
+            )
+            if res is None:
+                # not in database
+                log.msg("This event is not in the database.")
+                table.insert(item)
+            else:
+                log.msg("This event '%s' is already in the database." % item['evento'])
 
     def fix_date(self, string):
         """
