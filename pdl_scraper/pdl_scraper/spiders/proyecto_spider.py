@@ -69,7 +69,7 @@ class ProyectoSpider(CrawlSpider):
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NombreDelEnlace':
-                item['expediente'] = sel.xpath('@value').extract_first().replace("\\", "/")
+                item['expediente'] = sel.xpath('@value').extract()[0].replace("\\", "/")
         item['seguimiento_page'] = response.url
         item['short_url'] = self.create_shorturl(item['codigo'])
 
