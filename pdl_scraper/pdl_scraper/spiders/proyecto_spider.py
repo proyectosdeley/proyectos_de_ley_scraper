@@ -23,7 +23,7 @@ class ProyectoSpider(CrawlSpider):
 
     def __init__(self, category=None, *args, **kwargs):
         super(ProyectoSpider, self).__init__(*args, **kwargs)
-        self.legislatura = "2011"
+        self.legislatura = "2016"
 
     def parse_item(self, response):
         self.log("this is the url: %s" % response.url)
@@ -69,7 +69,7 @@ class ProyectoSpider(CrawlSpider):
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
         for_expediente = [
-            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf'
+            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2016.nsf'
             '/visbusqptramdoc/',
             item['codigo'],
             '?opendocument',
