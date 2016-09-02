@@ -31,7 +31,10 @@ class PdlScraperPipeline(object):
         table = db['pdl_proyecto']
 
         db.query("SELECT setval('pdl_proyecto_id_seq', (SELECT MAX(id) FROM pdl_proyecto)+1)")
-        is_in_db = table.find_one(codigo=item['codigo'])
+        is_in_db = table.find_one(
+            codigo=item['codigo'],
+            legislatura=item['legislatura'],
+        )
         if is_in_db is None:
             log.msg(">> %s is not in db" % item['codigo'])
             # get last used id in our database

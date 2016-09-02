@@ -23,12 +23,13 @@ class ProyectoSpider(CrawlSpider):
 
     def __init__(self, category=None, *args, **kwargs):
         super(ProyectoSpider, self).__init__(*args, **kwargs)
-        self.legislatura = "2016"
+        self.legislatura = 2016
 
     def parse_item(self, response):
         self.log("this is the url: %s" % response.url)
         item = PdlScraperItem()
         item['codigo'] = ''
+        item['legislatura'] = self.legislatura
         item['numero_proyecto'] = ''
         item['congresistas'] = ''
         item['titulo'] = ''
@@ -84,24 +85,18 @@ class ProyectoSpider(CrawlSpider):
         codigo = item['codigo']
         for sel in response.xpath("//a"):
             href = sel.xpath("@href").extract()[0]
-
-            pattern = re.compile("\$FILE\/" + str(codigo) + "\.pdf$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
-
-            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
-
-            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
+            patterns = [
+                "\$FILE\/" + str(codigo) + "\.pdf$",
+                "\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$",
+                "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
+                "\/PL" + str(codigo) + "[0-9]+\.pdf",
+            ]
+            for pattern in patterns:
+                pattern = re.compile(pattern)
+                if re.search(pattern, href):
+                    self.log("Found pdfurl for code: %s" % str(codigo))
+                    item['pdf_url'] = href
+                    return item
 
         self.log("We failed to parse pdfurl for this project %s:" % str(codigo))
         item['pdf_url'] = ''

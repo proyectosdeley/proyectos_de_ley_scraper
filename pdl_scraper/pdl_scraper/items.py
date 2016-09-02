@@ -11,6 +11,7 @@ from scrapy.item import Item, Field
 class PdlScraperItem(Item):
     # define the fields for your item here like:
     codigo = Field()
+    legislatura = Field()
     numero_proyecto = Field()
     short_url = Field()
     congresistas = Field()
