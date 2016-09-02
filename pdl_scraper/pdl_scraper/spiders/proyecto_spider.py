@@ -69,8 +69,8 @@ class ProyectoSpider(CrawlSpider):
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
         for_expediente = [
-            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2016.nsf'
-            '/visbusqptramdoc/',
+            'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf/'
+            'Sicr/TraDocEstProc/CLProLey2016.nsf/PAporNumeroInverso/',
             item['codigo'],
             '?opendocument',
         ]
