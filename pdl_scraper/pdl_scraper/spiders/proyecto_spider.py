@@ -68,13 +68,8 @@ class ProyectoSpider(CrawlSpider):
                 item['titulo_de_ley'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
-        for_expediente = [
-            'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf/'
-            'Sicr/TraDocEstProc/CLProLey2016.nsf/PAporNumeroInverso/',
-            item['codigo'],
-            '?opendocument',
-        ]
-        item['expediente'] = ''.join(for_expediente)
+            if attr_name == 'NombreDelEnlace':
+                item['expediente'] = sel.xpath('@value').extract_first().replace("\\", "/")
         item['seguimiento_page'] = response.url
         item['short_url'] = self.create_shorturl(item['codigo'])
 
