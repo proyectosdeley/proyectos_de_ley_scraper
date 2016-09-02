@@ -2,7 +2,6 @@
 import re
 
 import short_url
-
 import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
@@ -14,7 +13,7 @@ class ProyectoSpider(CrawlSpider):
     name = "proyecto"
     allowed_domains = ["www2.congreso.gob.pe"]
     start_urls = (
-        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf'
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
         '/PAporNumeroInverso?OpenView',
     )
 
