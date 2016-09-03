@@ -69,14 +69,18 @@ class ProyectoSpider(CrawlSpider):
                 item['titulo_de_ley'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
-            if attr_name == 'NombreDelEnlace':
-                item['expediente'] = sel.xpath('@value').extract()[0].replace("\\", "/")
+        item['expediente'] = [
+            "http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/"
+            "visbusqptramdoc1621/{}?opendocument".format(item['codigo'])
+        ]
         item['seguimiento_page'] = response.url
         item['short_url'] = self.create_shorturl(item['codigo'])
 
         self.log("Worked on item %s." % str(item['codigo']))
-        request = scrapy.Request(item['expediente'],
-                                 callback=self.parse_pdfurl)
+        request = scrapy.Request(
+            item['expediente'],
+            callback=self.parse_pdfurl,
+        )
         request.meta['item'] = item
         return request
 
