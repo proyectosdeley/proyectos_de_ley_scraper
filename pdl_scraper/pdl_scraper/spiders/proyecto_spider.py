@@ -95,7 +95,7 @@ class ProyectoSpider(CrawlSpider):
                 "\$FILE\/" + str(codigo) + "\.pdf$",
                 "\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$",
                 "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
-                "\/PL" + str(codigo) + "[0-9]+\.pdf",
+                "\/PL" + str(codigo) + "[0-9]+-?\.pdf",
             ]
             for pattern in patterns:
                 pattern = re.compile(pattern)
