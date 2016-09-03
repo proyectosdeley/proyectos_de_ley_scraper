@@ -15,6 +15,10 @@ class ProyectoSpider(CrawlSpider):
     start_urls = (
         'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
         '/PAporNumeroInverso?OpenView',
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
+        '/PAporNumeroInverso?OpenView&Start=100',
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
+        '/PAporNumeroInverso?OpenView&Start=199',
     )
 
     rules = (
