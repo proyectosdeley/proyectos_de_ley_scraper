@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
-
 import scrapy
-from scrapy.spider import log
 
 from pdl_scraper.items import ExpedienteItem
 from pdl_scraper.models import db_connect
@@ -30,7 +27,7 @@ class ExpedienteSpider(scrapy.Spider):
         res = db.query(query)
         for i in res:
             append(i['expediente'])
-            log.msg('Appending %s to start_urls.' % str(i['expediente']))
+            self.logger.debug('Appending {} to start_urls.'.format(i['expediente']))
 
         return start_urls
 
