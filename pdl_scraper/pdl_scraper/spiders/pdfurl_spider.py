@@ -9,6 +9,9 @@ from pdl_scraper.models import db_connect
 
 
 class PdfUrlSpider(scrapy.Spider):
+    """
+    Spider to update those projects that are missing the link to the PDF file.
+    """
     name = "pdfurl"
     allowed_domains = ["www2.congreso.gob.pe"]
 
@@ -28,22 +31,17 @@ class PdfUrlSpider(scrapy.Spider):
     def find_pdfurl(self, codigo, response):
         for sel in response.xpath("//a"):
             href = sel.xpath("@href").extract()[0]
-
-            pattern = re.compile("\$FILE\/" + str(codigo) + "\.pdf$")
-            if re.search(pattern, href):
-                log.msg("Found pdfurl for code: %s" % str(codigo))
-                return href
-
-            pattern = re.compile("\$FILE\/.*" + str(codigo) + "(PL)*[0-9]+\.*-*,?\.*pdf$")
-            if re.search(pattern, href):
-                log.msg("Found pdfurl for code: %s" % str(codigo))
-                return href
-
-            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$")
-            if re.search(pattern, href):
-                log.msg("Found pdfurl for code: %s" % str(codigo))
-                return href
-
+            patterns = [
+                "\$FILE\/" + str(codigo) + "\.pdf$",
+                "\$FILE\/.*" + str(codigo) + "(PL)*[0-9]+\.*-*,?\.*pdf$",
+                "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
+                "\/PL" + str(codigo) + "[0-9]+-?\.+pdf",
+            ]
+            for pattern in patterns:
+                pattern = re.compile(pattern)
+                if re.search(pattern, href):
+                    log.msg("Found pdfurl for code: %s" % str(codigo))
+                    return href
         log.msg("We failed to parse pdfurl for this project %s:" % str(codigo))
         return ''
 

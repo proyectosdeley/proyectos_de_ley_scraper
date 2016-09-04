@@ -2,7 +2,6 @@
 import re
 
 import short_url
-
 import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
@@ -14,8 +13,12 @@ class ProyectoSpider(CrawlSpider):
     name = "proyecto"
     allowed_domains = ["www2.congreso.gob.pe"]
     start_urls = (
-        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2011.nsf'
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
         '/PAporNumeroInverso?OpenView',
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
+        '/PAporNumeroInverso?OpenView&Start=100',
+        'http://www2.congreso.gob.pe/Sicr/TraDocEstProc/CLProLey2016.nsf'
+        '/PAporNumeroInverso?OpenView&Start=199',
     )
 
     rules = (
@@ -24,12 +27,13 @@ class ProyectoSpider(CrawlSpider):
 
     def __init__(self, category=None, *args, **kwargs):
         super(ProyectoSpider, self).__init__(*args, **kwargs)
-        self.legislatura = "2011"
+        self.legislatura = 2016
 
     def parse_item(self, response):
         self.log("this is the url: %s" % response.url)
         item = PdlScraperItem()
         item['codigo'] = ''
+        item['legislatura'] = self.legislatura
         item['numero_proyecto'] = ''
         item['congresistas'] = ''
         item['titulo'] = ''
@@ -69,19 +73,16 @@ class ProyectoSpider(CrawlSpider):
                 item['titulo_de_ley'] = sel.xpath('@value').extract()[0]
             if attr_name == 'NombreDeLaComision':
                 item['nombre_comision'] = sel.xpath('@value').extract()[0]
-        for_expediente = [
-            'http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf'
-            '/visbusqptramdoc/',
-            item['codigo'],
-            '?opendocument',
-        ]
-        item['expediente'] = ''.join(for_expediente)
+        item['expediente'] = "http://www2.congreso.gob.pe/sicr/tradocestproc/Expvirt_2011.nsf/" \
+                             "visbusqptramdoc1621/{}?opendocument".format(item['codigo'])
         item['seguimiento_page'] = response.url
         item['short_url'] = self.create_shorturl(item['codigo'])
 
         self.log("Worked on item %s." % str(item['codigo']))
-        request = scrapy.Request(item['expediente'],
-                                 callback=self.parse_pdfurl)
+        request = scrapy.Request(
+            item['expediente'],
+            callback=self.parse_pdfurl,
+        )
         request.meta['item'] = item
         return request
 
@@ -90,24 +91,18 @@ class ProyectoSpider(CrawlSpider):
         codigo = item['codigo']
         for sel in response.xpath("//a"):
             href = sel.xpath("@href").extract()[0]
-
-            pattern = re.compile("\$FILE\/" + str(codigo) + "\.pdf$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
-
-            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
-
-            pattern = re.compile("\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$")
-            if re.search(pattern, href):
-                self.log("Found pdfurl for code: %s" % str(codigo))
-                item['pdf_url'] = href
-                return item
+            patterns = [
+                "\$FILE\/" + str(codigo) + "\.pdf$",
+                "\$FILE\/.+" + str(codigo) + "[0-9]+\.*-?\.pdf$",
+                "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
+                "\/PL" + str(codigo) + "[0-9]+-?\.+pdf",
+            ]
+            for pattern in patterns:
+                pattern = re.compile(pattern)
+                if re.search(pattern, href):
+                    self.log("Found pdfurl for code: %s" % str(codigo))
+                    item['pdf_url'] = href
+                    return item
 
         self.log("We failed to parse pdfurl for this project %s:" % str(codigo))
         item['pdf_url'] = ''

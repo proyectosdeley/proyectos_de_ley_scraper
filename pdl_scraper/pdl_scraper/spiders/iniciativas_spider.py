@@ -12,17 +12,6 @@ class IniciativaSpider(scrapy.Spider):
         super(IniciativaSpider, self).__init__(*args, **kwargs)
         self.start_urls = self.get_my_urls()
 
-    def parse(self, response):
-        item = IniciativaItem()
-        for sel in response.xpath("//input"):
-            attr_name = sel.xpath('@name').extract()[0]
-            if attr_name == 'CodIni':
-                item['codigo'] = sel.xpath('@value').extract()[0]
-
-            if attr_name == 'CodIniSecu':
-                item['iniciativas_agrupadas'] = sel.xpath('@value').extract()[0]
-        yield item
-
     def get_my_urls(self):
         db = db_connect()
         start_urls = []
@@ -50,4 +39,13 @@ class IniciativaSpider(scrapy.Spider):
 
         return start_urls
 
+    def parse(self, response):
+        item = IniciativaItem()
+        for sel in response.xpath("//input"):
+            attr_name = sel.xpath('@name').extract()[0]
+            if attr_name == 'CodIni':
+                item['codigo'] = sel.xpath('@value').extract()[0]
 
+            if attr_name == 'CodIniSecu':
+                item['iniciativas_agrupadas'] = sel.xpath('@value').extract()[0]
+        yield item
