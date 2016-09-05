@@ -26,6 +26,7 @@ save the scraped data.
     "database": "pdl",                                                           
     "crawlera_user": "optional",                                                    
     "crawlera_pass": "optional",
-    "crawlera_enabled": "false"
+    "crawlera_enabled": "false",
+    "legislature": "2016"
 }
 ```

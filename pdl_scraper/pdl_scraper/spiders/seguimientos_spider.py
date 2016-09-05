@@ -3,6 +3,7 @@ from scrapy import log
 
 from pdl_scraper.items import SeguimientosItem
 from pdl_scraper.models import db_connect
+from pdl_scraper import settings
 
 
 class SeguimientoSpider(scrapy.Spider):
@@ -38,8 +39,9 @@ class SeguimientoSpider(scrapy.Spider):
 
         # get list of proyects ids from pdl_proyecto table with no events
         query = "select seguimiento_page, pdl_proyecto.id, codigo, evento " \
-                "from pdl_proyecto LEFT OUTER  JOIN  pdl_seguimientos ON " \
-                "(pdl_proyecto.id = pdl_seguimientos.proyecto_id)"
+                "from pdl_proyecto LEFT OUTER JOIN pdl_seguimientos ON " \
+                "(pdl_proyecto.id = pdl_seguimientos.proyecto_id) WHERE " \
+                "pdl_proyecto.legislatura={}".format(settings.LEGISLATURE)
         res = db.query(query)
         for i in res:
             if i['evento'] is None:
@@ -63,7 +65,10 @@ class SeguimientoSpider(scrapy.Spider):
         # now get those that have events but are not law already
         these_proyecto_ids_are_not_law = []
         append = these_proyecto_ids_are_not_law.append
-        query = "select distinct proyecto_id from pdl_seguimientos"
+        query = "select distinct proyecto_id from pdl_seguimientos " \
+                "LEFT OUTER JOIN pdl_proyecto ON " \
+                "(pdl_proyecto.id = pdl_seguimientos.proyecto_id) where "\
+                "pdl_proyecto.legislatura = {}".format(settings.LEGISLATURE)
         res = db.query(query)
         for i in res:
             if i['proyecto_id'] not in these_proyecto_ids_are_law and \

@@ -42,6 +42,7 @@ DATABASE = {
     'database': get_secret('database'),
 }
 
+LEGISLATURE = get_secret("legislature")
 
 BOT_NAME = 'pdl_scraper'
 
