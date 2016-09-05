@@ -6,6 +6,7 @@ from scrapy import log
 
 from pdl_scraper.items import PdlPdfUrlItem
 from pdl_scraper.models import db_connect
+from pdl_scraper import settings
 
 
 class PdfUrlSpider(scrapy.Spider):
@@ -54,8 +55,8 @@ class PdfUrlSpider(scrapy.Spider):
         start_urls = []
         append = start_urls.append
 
-        # get list of proyects ids from pdl_proyecto table with no events
-        query = "select expediente, pdf_url from pdl_proyecto"
+        query = "select expediente, pdf_url from pdl_proyecto WHERE " \
+                "legislatura={}".format(settings.LEGISLATURE)
         res = db.query(query)
         for i in res:
             if i['pdf_url'] is None or i['pdf_url'].strip() == '':

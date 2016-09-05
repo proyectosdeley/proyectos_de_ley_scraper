@@ -2,6 +2,7 @@
 import scrapy
 from pdl_scraper.models import db_connect
 from pdl_scraper.items import IniciativaItem
+from pdl_scraper import settings
 
 
 class IniciativaSpider(scrapy.Spider):
@@ -18,7 +19,7 @@ class IniciativaSpider(scrapy.Spider):
         append = start_urls.append
 
         query = "select codigo, iniciativas_agrupadas, seguimiento_page " \
-                "from pdl_proyecto order by time_edited"
+                "from pdl_proyecto WHERE legislatura={} order by time_edited".format(settings.LEGISLATURE)
         res = db.query(query)
 
         for i in res:

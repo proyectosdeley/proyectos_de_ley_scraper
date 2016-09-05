@@ -3,6 +3,7 @@ import scrapy
 
 from pdl_scraper.items import ExpedienteItem
 from pdl_scraper.models import db_connect
+from pdl_scraper import settings
 
 
 class ExpedienteSpider(scrapy.Spider):
@@ -23,7 +24,7 @@ class ExpedienteSpider(scrapy.Spider):
         append = start_urls.append
 
         # get list of proyects ids from pdl_proyecto table with no events
-        query = "select expediente from pdl_proyecto"
+        query = "select expediente from pdl_proyecto WHERE legislatura={}".format(settings.LEGISLATURE)
         res = db.query(query)
         for i in res:
             append(i['expediente'])
