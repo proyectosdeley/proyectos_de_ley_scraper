@@ -28,8 +28,6 @@ class ExpedienteSpider(scrapy.Spider):
         res = db.query(query)
         for i in res:
             append(i['expediente'])
-            self.logger.debug('Appending {} to start_urls.'.format(i['expediente']))
-
         return start_urls
 
     def parse(self, response):
