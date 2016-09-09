@@ -36,10 +36,10 @@ class PdfUrlSpider(scrapy.Spider):
                 "\$FILE\/" + str(codigo) + "\.pdf$",
                 "\$FILE\/.*" + str(codigo) + "(PL)*[0-9]+\.*-*,?\.*pdf$",
                 "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
-                "\/PL" + str(codigo) + "[0-9]+-?\.+[PDFpdf]",
+                "\/PL" + str(codigo) + "[0-9]+-?\.+pdf",
             ]
             for pattern in patterns:
-                pattern = re.compile(pattern)
+                pattern = re.compile(pattern, re.IGNORECASE)
                 if re.search(pattern, href):
                     log.msg("Found pdfurl for code: %s" % str(codigo))
                     return href
