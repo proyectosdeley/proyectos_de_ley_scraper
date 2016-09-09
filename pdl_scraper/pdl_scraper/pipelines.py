@@ -14,11 +14,19 @@ from scrapy import log
 from models import db_connect
 
 
+def convert_to_ascii(my_string):
+    return unicodedata.normalize(
+        'NFKD',
+        my_string,
+    ).encode('ascii', 'ignore').decode('utf-8')
+
+
 class PdlScraperPipeline(object):
     def process_item(self, item, spider):
         if spider.name == 'proyecto':
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
+            item['congresistas_ascii'] = convert_to_ascii(item['congresista'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
             item['time_edited'] = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -130,7 +138,6 @@ class PdlScraperPipeline(object):
             else:
                 slug = slug.encode("utf-8")
             return slug + "/"
-
 
 class SeguimientosPipeline(object):
     def process_item(self, item, spider):
