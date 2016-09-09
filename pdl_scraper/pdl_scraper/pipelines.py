@@ -26,7 +26,7 @@ class PdlScraperPipeline(object):
         if spider.name == 'proyecto':
             item['fecha_presentacion'] = self.fix_date(item['fecha_presentacion'])
             item['congresistas'] = self.parse_names(item['congresistas'])
-            item['congresistas_ascii'] = convert_to_ascii(item['congresista'])
+            item['congresistas_ascii'] = convert_to_ascii(item['congresistas'])
             item['iniciativas_agrupadas'] = self.parse_iniciativas(item['iniciativas_agrupadas'])
             item['time_created'] = datetime.utcnow().replace(tzinfo=pytz.utc)
             item['time_edited'] = datetime.utcnow().replace(tzinfo=pytz.utc)
