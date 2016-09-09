@@ -36,7 +36,7 @@ class PdfUrlSpider(scrapy.Spider):
                 "\$FILE\/" + str(codigo) + "\.pdf$",
                 "\$FILE\/.*" + str(codigo) + "(PL)*[0-9]+\.*-*,?\.*pdf$",
                 "\$FILE\/.+" + str(codigo) + "[0-9]+\.PDF$",
-                "\/PL" + str(codigo) + "[0-9]+-?\.+pdf",
+                "\/PL" + str(codigo) + "[0-9]+-?\.+[PDFpdf]",
             ]
             for pattern in patterns:
                 pattern = re.compile(pattern)
