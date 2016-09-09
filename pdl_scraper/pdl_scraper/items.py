@@ -15,6 +15,7 @@ class PdlScraperItem(Item):
     numero_proyecto = Field()
     short_url = Field()
     congresistas = Field()
+    congresistas_ascii = Field()
     fecha_presentacion = Field()
     titulo = Field()
     expediente = Field()
